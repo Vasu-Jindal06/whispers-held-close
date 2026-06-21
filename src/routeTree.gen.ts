@@ -13,6 +13,7 @@ import { Route as WriteRouteImport } from './routes/write'
 import { Route as WallRouteImport } from './routes/wall'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PinRouteImport } from './routes/pin'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WriteRoute = WriteRouteImport.update({
@@ -35,6 +36,11 @@ const PinRoute = PinRouteImport.update({
   path: '/pin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/pin': typeof PinRoute
   '/privacy': typeof PrivacyRoute
   '/wall': typeof WallRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/pin': typeof PinRoute
   '/privacy': typeof PrivacyRoute
   '/wall': typeof WallRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/pin': typeof PinRoute
   '/privacy': typeof PrivacyRoute
   '/wall': typeof WallRoute
@@ -65,14 +74,15 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pin' | '/privacy' | '/wall' | '/write'
+  fullPaths: '/' | '/about' | '/pin' | '/privacy' | '/wall' | '/write'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pin' | '/privacy' | '/wall' | '/write'
-  id: '__root__' | '/' | '/pin' | '/privacy' | '/wall' | '/write'
+  to: '/' | '/about' | '/pin' | '/privacy' | '/wall' | '/write'
+  id: '__root__' | '/' | '/about' | '/pin' | '/privacy' | '/wall' | '/write'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   PinRoute: typeof PinRoute
   PrivacyRoute: typeof PrivacyRoute
   WallRoute: typeof WallRoute
@@ -109,6 +119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PinRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,6 +138,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   PinRoute: PinRoute,
   PrivacyRoute: PrivacyRoute,
   WallRoute: WallRoute,
