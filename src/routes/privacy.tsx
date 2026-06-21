@@ -32,7 +32,7 @@ const sections = [
   },
   {
     title: "Nothing is posted without consent",
-    body: "Every submission is reviewed by a small Enactus team. If you ticked 'internal only,' it stays internal. If you ticked the archive, we may publish it there. If you ticked nothing, we hold it privately as part of the project record only.",
+    body: "Every submission is reviewed by a small Enactus VIT Chennai team. If you ticked 'internal only,' it stays internal. If you ticked the archive, we may publish it there. If you ticked nothing, we hold it privately as part of the project record only.",
   },
   {
     title: "How review works",

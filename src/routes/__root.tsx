@@ -77,10 +77,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Letters Left Here — An Enactus Pride Month Archive" },
+      { title: "Letters Left Here — An Enactus VIT Chennai Pride Archive" },
       { name: "description", content: "A quiet digital archive of queer voices. Write a letter, pin a note, or read the wall — share only what feels safe." },
-      { name: "author", content: "Enactus" },
-      { property: "og:title", content: "Letters Left Here — An Enactus Pride Month Archive" },
+      { name: "author", content: "Enactus VIT Chennai" },
+      { property: "og:title", content: "Letters Left Here — An Enactus VIT Chennai Pride Archive" },
       { property: "og:description", content: "A safe, anonymous space to share coming out stories, hopes, advice, confessions, and messages to family." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

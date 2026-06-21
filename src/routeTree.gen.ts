@@ -17,6 +17,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PinRouteImport } from './routes/pin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as LetterIdRouteImport } from './routes/letter.$id'
 
 const WriteRoute = WriteRouteImport.update({
   id: '/write',
@@ -58,6 +59,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LetterIdRoute = LetterIdRouteImport.update({
+  id: '/letter/$id',
+  path: '/letter/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
+  '/letter/$id': typeof LetterIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
+  '/letter/$id': typeof LetterIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
+  '/letter/$id': typeof LetterIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/wall'
     | '/write'
+    | '/letter/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/wall'
     | '/write'
+    | '/letter/$id'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/wall'
     | '/write'
+    | '/letter/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +144,7 @@ export interface RootRouteChildren {
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WallRoute: typeof WallRoute
   WriteRoute: typeof WriteRoute
+  LetterIdRoute: typeof LetterIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/letter/$id': {
+      id: '/letter/$id'
+      path: '/letter/$id'
+      fullPath: '/letter/$id'
+      preLoaderRoute: typeof LetterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +224,7 @@ const rootRouteChildren: RootRouteChildren = {
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   WallRoute: WallRoute,
   WriteRoute: WriteRoute,
+  LetterIdRoute: LetterIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

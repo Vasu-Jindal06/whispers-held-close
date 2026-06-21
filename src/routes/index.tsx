@@ -1,16 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { WallCard } from "@/components/WallCard";
-import { wallItems } from "@/lib/wall-data";
+import { wallItems, voicesBeyond } from "@/lib/wall-data";
 import { useEffect, useState } from "react";
+import paperclipImg from "@/assets/paperclip.png";
+import stampImg from "@/assets/stamp.png";
+import flowerImg from "@/assets/flower.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Letters Left Here — An Enactus Pride Month Archive" },
+      { title: "Letters Left Here — An Enactus VIT Chennai Pride Archive" },
       { name: "description", content: "A quiet digital archive of queer voices. Write a letter, pin a note, or read the wall. Share only what feels safe." },
-      { property: "og:title", content: "Letters Left Here — An Enactus Pride Month Archive" },
-      { property: "og:description", content: "Anonymous, consent-first storytelling for Pride Month." },
+      { property: "og:title", content: "Letters Left Here — An Enactus VIT Chennai Pride Archive" },
+      { property: "og:description", content: "Anonymous, consent-first storytelling for Pride Month — hosted by Enactus VIT Chennai." },
     ],
   }),
   component: HomePage,
@@ -52,6 +55,7 @@ function HomePage() {
       <TrustBlock />
       <CategoriesBlock />
       <ArchivePreview />
+      <VoicesBeyond />
       <NotReadyBlock />
       <WhyBlock />
       <FinalCTA />
@@ -67,56 +71,98 @@ function Hero() {
   }, []);
 
   return (
-    <section className="relative mx-auto max-w-6xl px-6 pt-20 pb-24 md:pt-28 md:pb-32">
-      <p className="eyebrow mb-6">An Enactus Pride Month Archive · 2026</p>
-      <h1 className="serif text-5xl md:text-7xl leading-[1.02] tracking-tight max-w-4xl text-foreground">
-        Some truths are <em className="text-plum">easier to write</em> than say aloud.
-      </h1>
-      <p className="mt-7 max-w-2xl text-lg text-ink-soft leading-relaxed">
-        Letters Left Here is a quiet digital archive of queer voices — coming out
-        stories, anonymous confessions, advice to younger selves, messages to family,
-        and small hopes for what comes next. You can write a letter, pin a note,
-        or simply read the wall.
-      </p>
+    <section className="relative mx-auto max-w-6xl px-6 pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden">
+      <div className="grid md:grid-cols-12 gap-10 md:gap-12 items-start">
+        {/* LEFT — editorial copy */}
+        <div className="md:col-span-7">
+          <p className="eyebrow mb-6">An Enactus VIT Chennai Pride Archive · 2026</p>
+          <h1 className="serif text-5xl md:text-7xl leading-[1.02] tracking-tight text-foreground">
+            Some truths are <em className="text-plum">easier to write</em> than say aloud.
+          </h1>
+          <p className="mt-7 max-w-xl text-lg text-ink-soft leading-relaxed">
+            Letters Left Here is a quiet digital archive of queer voices — coming out
+            stories, anonymous confessions, advice to younger selves, messages to family,
+            and small hopes for what comes next. You can write a letter, pin a note,
+            or simply read the wall.
+          </p>
 
-      <div className="mt-10 flex flex-wrap items-center gap-3">
-        <Link to="/write" className="px-6 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition">
-          Write a Letter
-        </Link>
-        <Link to="/pin" className="px-6 py-3.5 rounded-full border border-foreground/30 text-foreground text-sm font-medium hover:bg-foreground/5 transition">
-          Pin a Note
-        </Link>
-        <Link to="/wall" className="px-6 py-3.5 rounded-full text-foreground text-sm font-medium hover:bg-foreground/5 transition">
-          Read the Wall →
-        </Link>
-        <Link to="/privacy" className="ml-2 text-sm text-ink-soft hover:text-foreground underline underline-offset-4 decoration-dotted">
-          How privacy works
-        </Link>
-      </div>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Link to="/write" className="px-6 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition">
+              Write a Letter
+            </Link>
+            <Link to="/pin" className="px-6 py-3.5 rounded-full border border-foreground/30 text-foreground text-sm font-medium hover:bg-foreground/5 transition">
+              Pin a Note
+            </Link>
+            <Link to="/wall" className="px-6 py-3.5 rounded-full text-foreground text-sm font-medium hover:bg-foreground/5 transition">
+              Read the Wall →
+            </Link>
+          </div>
+          <Link to="/privacy" className="inline-block mt-5 text-sm text-ink-soft hover:text-foreground underline underline-offset-4 decoration-dotted">
+            How privacy works →
+          </Link>
+        </div>
 
-      {/* Floating notes */}
-      <div className="mt-16 grid md:grid-cols-3 gap-6 items-start">
-        <div className="note-card tape-strip p-6 -rotate-2 bg-[color:color-mix(in_oklab,var(--blush)_24%,var(--card))]">
-          <span className="hand text-base text-plum">left here anonymously</span>
-          <p key={idx} className="serif text-2xl mt-3 leading-snug text-foreground float-in">
-            "{rotatingLines[idx]}"
-          </p>
-        </div>
-        <div className="note-card tape-strip p-6 rotate-1 bg-[color:color-mix(in_oklab,var(--lavender)_22%,var(--card))] md:mt-8">
-          <span className="hand text-base text-plum">to my younger self</span>
-          <p className="mt-3 text-foreground leading-relaxed">
-            You will not always have to translate yourself. There are rooms where
-            you arrive already understood.
-          </p>
-          <p className="mt-4 text-xs text-ink-soft">— R., 31</p>
-        </div>
-        <div className="note-card tape-strip p-6 -rotate-1 bg-[color:color-mix(in_oklab,var(--gold)_24%,var(--card))]">
-          <span className="hand text-base text-plum">a hope</span>
-          <p className="mt-3 text-foreground leading-relaxed">
-            That coming out becomes a small sentence. That one day it sounds
-            like 'I have a partner' and then we move on to lunch.
-          </p>
-          <p className="mt-4 text-xs text-ink-soft">anon</p>
+        {/* RIGHT — tactile archive collage */}
+        <div className="md:col-span-5 relative min-h-[460px] md:min-h-[560px]">
+          {/* back postcard */}
+          <div
+            className="absolute top-10 right-2 w-[78%] h-44 bg-[color:color-mix(in_oklab,var(--gold)_22%,var(--card))] paper-grain note-card paper-settle"
+            style={{ transform: "rotate(-6deg)", ['--rot' as never]: "-6deg" }}
+            aria-hidden
+          >
+            <div className="absolute inset-3 border border-dashed border-ink/15" />
+            <span className="absolute top-3 right-3 eyebrow text-[0.55rem]">postcard · 1.0</span>
+          </div>
+
+          {/* main featured letter */}
+          <article
+            className="absolute top-0 left-0 w-[88%] paper-card paper-grain p-7 md:p-8 paper-settle"
+            style={{ transform: "rotate(-1.5deg)", ['--rot' as never]: "-1.5deg" }}
+          >
+            <img
+              src={paperclipImg}
+              alt=""
+              aria-hidden
+              className="pointer-events-none absolute -top-7 left-8 w-11 md:w-12 rotate-[16deg] drop-shadow-[0_4px_6px_rgba(0,0,0,0.2)] select-none"
+            />
+            <img
+              src={stampImg}
+              alt=""
+              aria-hidden
+              loading="lazy"
+              className="pointer-events-none absolute -top-3 right-3 w-16 opacity-75 mix-blend-multiply select-none"
+            />
+            <span className="hand text-base text-plum">left here anonymously</span>
+            <p key={idx} className="serif text-2xl md:text-[1.7rem] mt-3 leading-snug text-foreground float-in">
+              "{rotatingLines[idx]}"
+            </p>
+            <div className="mt-5 pt-3 border-t border-dashed border-ink/15 flex justify-between text-[0.7rem] text-ink-soft">
+              <span>archive entry · 026</span>
+              <span className="hand text-sm text-plum">shared with permission</span>
+            </div>
+          </article>
+
+          {/* small pinned note */}
+          <article
+            className="absolute bottom-12 right-0 w-[60%] note-card pin-top paper-grain p-5 bg-[color:color-mix(in_oklab,var(--lavender)_30%,var(--card))] paper-settle"
+            style={{ transform: "rotate(4deg)", ['--rot' as never]: "4deg" }}
+          >
+            <span className="hand text-base text-plum">to my younger self</span>
+            <p className="mt-2 text-foreground leading-relaxed text-sm">
+              You will not always have to translate yourself. There are rooms where
+              you arrive already understood.
+            </p>
+            <p className="mt-3 text-[0.7rem] text-ink-soft">— R., 31</p>
+          </article>
+
+          {/* pressed flower */}
+          <img
+            src={flowerImg}
+            alt=""
+            aria-hidden
+            loading="lazy"
+            className="pointer-events-none absolute -bottom-2 -left-4 w-24 md:w-28 opacity-90 rotate-[-20deg] select-none"
+          />
         </div>
       </div>
     </section>
@@ -166,9 +212,10 @@ function CategoriesBlock() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {categories.map((c, i) => (
-          <div key={c.title} className="paper-card p-5 hover:-translate-y-0.5 transition-transform">
+          <div key={c.title} className="paper-card p-5 hover:-translate-y-0.5 transition-transform group">
             <span className="eyebrow text-[0.62rem]">0{i + 1}</span>
             <h3 className="serif text-xl mt-2 text-foreground">{c.title}</h3>
+            <span className="block w-8 h-px bg-plum/50 mt-3 origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" aria-hidden />
             <p className="hand text-base text-plum mt-3 leading-snug">{c.prompt}</p>
           </div>
         ))}
@@ -193,11 +240,58 @@ function ArchivePreview() {
             See the whole wall →
           </Link>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {preview.map((item) => (
             <WallCard key={item.id} item={item} dense />
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+function VoicesBeyond() {
+  return (
+    <section className="mx-auto max-w-6xl px-6 py-24">
+      <div className="flex flex-wrap items-end justify-between gap-6 mb-10">
+        <div className="max-w-2xl">
+          <p className="eyebrow mb-3">Voices beyond the wall</p>
+          <h2 className="serif text-3xl md:text-4xl text-foreground leading-tight">
+            A few voices that came before us — and made room.
+          </h2>
+          <p className="mt-4 text-ink-soft max-w-xl leading-relaxed">
+            The community wall holds the people writing in today. This shelf
+            holds a small lineage we read alongside it.
+          </p>
+        </div>
+        <p className="hand text-lg text-plum max-w-xs">
+          attributed excerpts only — placeholders here until verified for publication.
+        </p>
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-5">
+        {voicesBeyond.map((v) => (
+          <figure
+            key={v.name}
+            className="paper-card p-7 md:p-8 flex flex-col"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <span
+                aria-hidden
+                className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-paper-deep border border-ink/10 serif text-base text-plum"
+              >
+                {v.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
+              </span>
+              <div className="leading-tight">
+                <figcaption className="serif text-lg text-foreground">{v.name}</figcaption>
+                <p className="text-xs text-ink-soft">{v.role}{v.context ? ` · ${v.context}` : ""}</p>
+              </div>
+            </div>
+            <blockquote className="serif text-[1.15rem] text-foreground/90 leading-relaxed border-l-2 border-plum/40 pl-4">
+              "{v.quote}"
+            </blockquote>
+          </figure>
+        ))}
       </div>
     </section>
   );
@@ -245,7 +339,7 @@ function WhyBlock() {
             them as branding, without asking anyone to perform their pain.
           </p>
           <p className="hand text-2xl text-blush">
-            this campaign is held by Enactus, but the voices here belong only to the people who left them.
+            this campaign is hosted by Enactus VIT Chennai, but the voices here belong only to the people who left them.
           </p>
         </div>
       </div>
@@ -262,9 +356,9 @@ function FinalCTA() {
       </h2>
       <div className="grid md:grid-cols-3 gap-6">
         {[
-          { to: "/write", title: "Write a Letter", body: "For longer stories, memories, and reflections you want to give shape to.", cta: "Begin a letter" },
-          { to: "/pin", title: "Pin a Note", body: "For confessions, hopes, advice, and short truths. One line is enough.", cta: "Leave a note" },
-          { to: "/wall", title: "Read the Wall", body: "For sitting quietly and reading what others have already left here.", cta: "Open the wall" },
+          { to: "/write" as const, title: "Write a Letter", body: "For longer stories, memories, and reflections you want to give shape to.", cta: "Begin a letter" },
+          { to: "/pin" as const, title: "Pin a Note", body: "For confessions, hopes, advice, and short truths. One line is enough.", cta: "Leave a note" },
+          { to: "/wall" as const, title: "Read the Wall", body: "For sitting quietly and reading what others have already left here.", cta: "Open the wall" },
         ].map((c) => (
           <Link
             key={c.to}

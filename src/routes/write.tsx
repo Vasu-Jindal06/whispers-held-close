@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { useState } from "react";
+import paperclipImg from "@/assets/paperclip.png";
 
 export const Route = createFileRoute("/write")({
   head: () => ({
@@ -73,8 +74,15 @@ function WritePage() {
 
         <form
           onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
-          className="paper-card p-8 md:p-12 space-y-10"
+          className="paper-card paper-grain p-8 md:p-12 space-y-10 relative"
         >
+          <img
+            src={paperclipImg}
+            alt=""
+            aria-hidden
+            className="pointer-events-none absolute -top-9 left-12 w-14 md:w-16 rotate-[14deg] drop-shadow-[0_5px_7px_rgba(0,0,0,0.22)] select-none"
+          />
+          <div className="absolute top-5 right-6 eyebrow text-[0.6rem]">letter draft · 001</div>
           <Section number="01" title="What are you sharing?" hint="Pick one or more — or none if it doesn't fit a box.">
             <div className="flex flex-wrap gap-2">
               {categoryOptions.map((c) => (

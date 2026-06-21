@@ -24,7 +24,8 @@ function AboutPage() {
 
         <div className="mt-10 space-y-7 text-lg leading-relaxed text-foreground/90">
           <p>
-            Letters Left Here is a Pride Month campaign built by Enactus to do
+            Letters Left Here is a Pride Month campaign hosted by{" "}
+            <strong className="text-foreground">Enactus VIT Chennai</strong> to do
             one thing: hold queer stories carefully. Not flatten them into
             slogans. Not flatten them into rainbows. Just hold them.
           </p>
@@ -51,18 +52,18 @@ function AboutPage() {
             entry requirement — you do not have to be sure of anything.
           </p>
 
-          <h2 className="serif text-3xl text-foreground !leading-tight pt-6">What Enactus is doing here</h2>
+          <h2 className="serif text-3xl text-foreground !leading-tight pt-6">What Enactus VIT Chennai is doing here</h2>
           <p>
-            Enactus is a global community of student-led teams working on
-            social-impact projects. Our role here is to hold the space, build
-            the tools, and review submissions with care. That's it. The voices
-            on the wall belong to the people who left them — not to us, not to
-            our marketing.
+            Enactus VIT Chennai is a student-led team working on social-impact
+            projects out of VIT Chennai. Our role here is to hold the space,
+            build the tools, and review submissions with care. That's it. The
+            voices on the wall belong to the people who left them — not to us,
+            not to our marketing.
           </p>
           <p>
             We will never use a submission outside the permissions you set, and
-            we will never use this archive to brand Enactus on top of the
-            people who trusted it.
+            we will never use this archive to brand Enactus VIT Chennai on top
+            of the people who trusted it.
           </p>
 
           <h2 className="serif text-3xl text-foreground !leading-tight pt-6">What happens after Pride Month</h2>
