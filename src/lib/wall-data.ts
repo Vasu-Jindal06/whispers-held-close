@@ -7,6 +7,8 @@ export type WallItem = {
   author: string;
   tone?: "blush" | "lavender" | "teal" | "gold" | "paper";
   rotate?: number;
+  attach?: "paperclip" | "tape" | "tape-corner" | "pin";
+  fullLetter?: string;
 };
 
 export const wallItems: WallItem[] = [
@@ -19,6 +21,9 @@ export const wallItems: WallItem[] = [
     author: "— Aanya, 27",
     tone: "blush",
     rotate: -1.2,
+    attach: "paperclip",
+    fullLetter:
+      "Ma,\n\nI rehearsed it for three years before I said anything. The version I wrote in my head was cleaner, braver, with better lighting. The real one happened in the kitchen while you were washing rice. You didn't look up for a long time. Then you said 'eat something, the dal is getting cold.' I cried into the bowl. I think that was your way of saying: stay.\n\nWe have not spoken about it again. I don't know if you've told Papa. I don't know if I'm the daughter you wanted, or the one you are still learning to want. But you keep cooking for two when I visit. You ask about her by name now, even if your voice gets quieter on the word girlfriend.\n\nI used to think love had to be loud to count. You have taught me that some loves are dal getting cold in a bowl, and someone making sure I eat.\n\nYour daughter, still and always,\nA.",
   },
   {
     id: "2",
@@ -28,6 +33,7 @@ export const wallItems: WallItem[] = [
     author: "anon",
     tone: "paper",
     rotate: 1.5,
+    attach: "pin",
   },
   {
     id: "3",
@@ -37,6 +43,7 @@ export const wallItems: WallItem[] = [
     author: "— R., 31",
     tone: "lavender",
     rotate: -0.8,
+    attach: "tape",
   },
   {
     id: "4",
@@ -47,6 +54,9 @@ export const wallItems: WallItem[] = [
     author: "— Anonymous, 24",
     tone: "gold",
     rotate: 0.6,
+    attach: "paperclip",
+    fullLetter:
+      "Pa,\n\nI don't need you to march in a parade. I just need you to ask how he is, the way you ask about my brother's wife. That's the whole sentence. That's all of it.\n\nI know you grew up in a house where men didn't ask each other these things. I'm not asking you to be a different father. I'm asking you to be a slightly more curious one. Just on Sundays. Just over tea.\n\nHe makes me laugh in the morning. He remembers the names of my friends. He has met you once, and he was nervous for a week. That nervousness was love trying to introduce itself.\n\nWhen you're ready,\nYour son.",
   },
   {
     id: "5",
@@ -56,6 +66,7 @@ export const wallItems: WallItem[] = [
     author: "— Maya",
     tone: "teal",
     rotate: -1.8,
+    attach: "pin",
   },
   {
     id: "6",
@@ -65,6 +76,7 @@ export const wallItems: WallItem[] = [
     author: "anon",
     tone: "blush",
     rotate: 1.1,
+    attach: "tape",
   },
   {
     id: "7",
@@ -74,6 +86,7 @@ export const wallItems: WallItem[] = [
     author: "anon",
     tone: "paper",
     rotate: -0.4,
+    attach: "tape-corner",
   },
   {
     id: "8",
@@ -83,6 +96,7 @@ export const wallItems: WallItem[] = [
     author: "— Karan, ally",
     tone: "gold",
     rotate: 1.7,
+    attach: "pin",
   },
   {
     id: "9",
@@ -93,6 +107,9 @@ export const wallItems: WallItem[] = [
     author: "— J., 29",
     tone: "lavender",
     rotate: -0.6,
+    attach: "paperclip",
+    fullLetter:
+      "Fifteen,\n\nYou will spend a long time apologising for taking up space. For laughing too loud. For caring too much about a song. For looking too long at the girl in the chemistry lab. You will train yourself to be quieter than you are.\n\nOne day, in a city you haven't been to yet, someone will hand you a cup of coffee and not flinch when you talk about who you love. You will cry a little, quietly, into the foam. That is the moment things change. Wait for it.\n\nThe people who tell you you're too much are usually small rooms. You don't have to shrink. You have to find bigger rooms.\n\nLove,\nJ.",
   },
   {
     id: "10",
@@ -102,6 +119,7 @@ export const wallItems: WallItem[] = [
     author: "anon",
     tone: "teal",
     rotate: 0.9,
+    attach: "pin",
   },
   {
     id: "11",
@@ -111,6 +129,7 @@ export const wallItems: WallItem[] = [
     author: "— Sam",
     tone: "blush",
     rotate: -1.4,
+    attach: "tape",
   },
   {
     id: "12",
@@ -120,6 +139,7 @@ export const wallItems: WallItem[] = [
     author: "anon",
     tone: "paper",
     rotate: 1.2,
+    attach: "tape-corner",
   },
 ];
 
@@ -132,3 +152,43 @@ export const categories = [
   { key: "hope", label: "Hopes" },
   { key: "family", label: "Messages" },
 ] as const;
+
+export type VoiceBeyond = {
+  name: string;
+  role: string;
+  quote: string;
+  context?: string;
+};
+
+export const voicesBeyond: VoiceBeyond[] = [
+  {
+    name: "Sushant Divgikar",
+    role: "Performer, singer & queer icon",
+    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    context: "India",
+  },
+  {
+    name: "Laxmi Narayan Tripathi",
+    role: "Transgender rights activist",
+    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    context: "India",
+  },
+  {
+    name: "Alok Vaid-Menon",
+    role: "Writer & performance artist",
+    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    context: "USA / India",
+  },
+  {
+    name: "Vivek Shraya",
+    role: "Artist, musician & author",
+    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    context: "Canada / India",
+  },
+  {
+    name: "Audre Lorde",
+    role: "Poet & civil rights activist",
+    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    context: "USA · 1934–1992",
+  },
+];

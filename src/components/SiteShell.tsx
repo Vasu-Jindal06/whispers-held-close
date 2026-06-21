@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import type { ReactNode } from "react";
+import { AmbientAudio } from "./AmbientAudio";
 
 const navItems = [
   { to: "/", label: "Home" },
@@ -16,7 +17,20 @@ export function SiteShell({ children }: { children: ReactNode }) {
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
+      <AmbientAudio />
     </div>
+  );
+}
+
+function Logo() {
+  return (
+    <span
+      aria-hidden
+      className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-ink/30 text-[0.6rem] tracking-[0.18em] font-medium text-ink-soft bg-paper-deep/40"
+      title="Enactus VIT Chennai"
+    >
+      EV
+    </span>
   );
 }
 
@@ -24,9 +38,14 @@ function Header() {
   return (
     <header className="border-b border-border/60 backdrop-blur-sm bg-background/70 sticky top-0 z-40">
       <div className="mx-auto max-w-6xl px-6 py-5 flex items-center justify-between gap-6">
-        <Link to="/" className="flex items-baseline gap-2 group">
-          <span className="serif text-2xl tracking-tight text-foreground">Letters Left Here</span>
-          <span className="hand text-base text-plum hidden sm:inline">— an Enactus Pride archive</span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <Logo />
+          <span className="flex flex-col leading-tight">
+            <span className="serif text-2xl tracking-tight text-foreground">Letters Left Here</span>
+            <span className="text-[0.66rem] tracking-[0.18em] uppercase text-ink-soft hidden sm:inline">
+              an Enactus VIT Chennai Pride archive
+            </span>
+          </span>
         </Link>
         <nav className="hidden md:flex items-center gap-7 text-sm">
           {navItems.map((n) => (
@@ -60,8 +79,8 @@ function Footer() {
           <p className="serif text-2xl text-foreground">Letters Left Here</p>
           <p className="hand text-lg text-plum mt-1">a quiet place to leave something</p>
           <p className="mt-4 text-sm text-ink-soft max-w-md leading-relaxed">
-            A Pride Month storytelling archive run by Enactus. Built to hold queer voices —
-            anonymously, gently, and only with consent.
+            A Pride Month storytelling archive hosted by Enactus VIT Chennai.
+            Built to hold queer voices — anonymously, gently, and only with consent.
           </p>
         </div>
         <div>
@@ -84,7 +103,7 @@ function Footer() {
       </div>
       <div className="border-t border-border/60">
         <div className="mx-auto max-w-6xl px-6 py-5 flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
-          <span>An Enactus initiative · Pride Month {new Date().getFullYear()}</span>
+          <span>An Enactus VIT Chennai Pride Month initiative · {new Date().getFullYear()}</span>
           <span className="hand text-base text-plum">share only what feels safe.</span>
         </div>
       </div>

@@ -1,5 +1,7 @@
 import type { WallItem } from "@/lib/wall-data";
 import { cn } from "@/lib/utils";
+import { Link } from "@tanstack/react-router";
+import paperclipImg from "@/assets/paperclip.png";
 
 const toneBg: Record<NonNullable<WallItem["tone"]>, string> = {
   blush: "bg-[color:color-mix(in_oklab,var(--blush)_30%,var(--card))]",
@@ -12,15 +14,34 @@ const toneBg: Record<NonNullable<WallItem["tone"]>, string> = {
 export function WallCard({ item, dense = false }: { item: WallItem; dense?: boolean }) {
   const tone = item.tone ?? "paper";
   const isLetter = item.kind === "letter";
+  const attach = item.attach ?? (isLetter ? "paperclip" : "tape");
+
+  const attachClass =
+    attach === "tape" ? "tape-strip" :
+    attach === "tape-corner" ? "tape-corner" :
+    attach === "pin" ? "pin-top" :
+    "";
+
   return (
     <article
       className={cn(
-        "note-card tape-strip p-6 md:p-7 transition-transform duration-300 hover:-translate-y-1 hover:rotate-0",
+        "note-card relative p-6 md:p-7 transition-transform duration-500 ease-out hover:-translate-y-1 hover:rotate-0 paper-grain paper-settle",
         toneBg[tone],
-        isLetter ? "md:p-9" : "",
+        attachClass,
+        isLetter ? "md:p-9 pt-9 md:pt-12" : "",
       )}
-      style={{ transform: `rotate(${item.rotate ?? 0}deg)` }}
+      style={{ transform: `rotate(${item.rotate ?? 0}deg)`, ['--rot' as never]: `${item.rotate ?? 0}deg` }}
     >
+      {attach === "paperclip" && (
+        <img
+          src={paperclipImg}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          className="pointer-events-none absolute -top-5 left-6 w-7 md:w-9 rotate-[18deg] drop-shadow-[0_3px_4px_rgba(0,0,0,0.18)] select-none"
+        />
+      )}
+
       <div className="flex items-center justify-between mb-3">
         <span className="hand text-base text-plum">{item.label}</span>
         <span className="eyebrow text-[0.62rem]">{item.kind}</span>
@@ -41,10 +62,14 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
 
       <div className="mt-5 pt-4 border-t border-dashed border-ink/15 flex items-center justify-between">
         <span className="text-xs text-ink-soft">{item.author}</span>
-        {isLetter && (
-          <button className="text-xs text-plum hover:text-foreground underline underline-offset-4 decoration-dotted">
-            Read full letter
-          </button>
+        {isLetter && item.fullLetter && (
+          <Link
+            to="/letter/$id"
+            params={{ id: item.id }}
+            className="text-xs text-plum hover:text-foreground underline underline-offset-4 decoration-dotted"
+          >
+            Read full letter →
+          </Link>
         )}
       </div>
     </article>

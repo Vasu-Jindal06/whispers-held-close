@@ -144,6 +144,45 @@
   }
 }
 
+@utility tape-corner {
+  &::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: -12px;
+    transform: rotate(-30deg);
+    width: 70px;
+    height: 20px;
+    background: var(--tape);
+    box-shadow: 0 1px 3px color-mix(in oklab, var(--ink) 12%, transparent);
+  }
+}
+
+@utility pin-top {
+  &::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: radial-gradient(circle at 35% 30%, oklch(0.75 0.15 25) 0%, oklch(0.50 0.18 25) 60%, oklch(0.35 0.10 25) 100%);
+    box-shadow:
+      0 2px 3px color-mix(in oklab, var(--ink) 35%, transparent),
+      inset -1px -1px 1px color-mix(in oklab, black 25%, transparent);
+    z-index: 2;
+  }
+}
+
+@utility paper-grain {
+  background-image:
+    radial-gradient(at 12% 18%, color-mix(in oklab, var(--ink) 5%, transparent) 0px, transparent 60%),
+    radial-gradient(at 88% 82%, color-mix(in oklab, var(--ink) 4%, transparent) 0px, transparent 55%);
+  background-blend-mode: multiply;
+}
+
 @utility hand {
   font-family: var(--font-hand);
   font-weight: 500;
@@ -169,4 +208,23 @@
 
 @utility float-in {
   animation: float-in 0.7s ease-out both;
+}
+
+@keyframes paper-settle {
+  from { opacity: 0; transform: translateY(14px) rotate(var(--rot, 0deg)) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) rotate(var(--rot, 0deg)) scale(1); }
+}
+
+@utility paper-settle {
+  animation: paper-settle 0.9s cubic-bezier(.22,.61,.36,1) both;
+}
+
+@keyframes stamp-press {
+  0% { opacity: 0; transform: scale(1.4) rotate(-8deg); }
+  60% { opacity: 1; transform: scale(0.96) rotate(-8deg); }
+  100% { opacity: 0.88; transform: scale(1) rotate(-8deg); }
+}
+
+@utility stamp-press {
+  animation: stamp-press 0.6s ease-out both;
 }
