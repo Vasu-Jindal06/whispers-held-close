@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WriteRouteImport } from './routes/write'
+import { Route as WallRouteImport } from './routes/wall'
 import { Route as PinRouteImport } from './routes/pin'
 import { Route as IndexRouteImport } from './routes/index'
 
 const WriteRoute = WriteRouteImport.update({
   id: '/write',
   path: '/write',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WallRoute = WallRouteImport.update({
+  id: '/wall',
+  path: '/wall',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PinRoute = PinRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pin': typeof PinRoute
+  '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pin': typeof PinRoute
+  '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/pin': typeof PinRoute
+  '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pin' | '/write'
+  fullPaths: '/' | '/pin' | '/wall' | '/write'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pin' | '/write'
-  id: '__root__' | '/' | '/pin' | '/write'
+  to: '/' | '/pin' | '/wall' | '/write'
+  id: '__root__' | '/' | '/pin' | '/wall' | '/write'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PinRoute: typeof PinRoute
+  WallRoute: typeof WallRoute
   WriteRoute: typeof WriteRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/write'
       fullPath: '/write'
       preLoaderRoute: typeof WriteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wall': {
+      id: '/wall'
+      path: '/wall'
+      fullPath: '/wall'
+      preLoaderRoute: typeof WallRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pin': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PinRoute: PinRoute,
+  WallRoute: WallRoute,
   WriteRoute: WriteRoute,
 }
 export const routeTree = rootRouteImport
