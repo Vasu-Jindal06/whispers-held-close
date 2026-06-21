@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WriteRouteImport } from './routes/write'
 import { Route as WallRouteImport } from './routes/wall'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PinRouteImport } from './routes/pin'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -22,6 +23,11 @@ const WriteRoute = WriteRouteImport.update({
 const WallRoute = WallRouteImport.update({
   id: '/wall',
   path: '/wall',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PinRoute = PinRouteImport.update({
@@ -38,12 +44,14 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pin': typeof PinRoute
+  '/privacy': typeof PrivacyRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pin': typeof PinRoute
+  '/privacy': typeof PrivacyRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/pin': typeof PinRoute
+  '/privacy': typeof PrivacyRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pin' | '/wall' | '/write'
+  fullPaths: '/' | '/pin' | '/privacy' | '/wall' | '/write'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pin' | '/wall' | '/write'
-  id: '__root__' | '/' | '/pin' | '/wall' | '/write'
+  to: '/' | '/pin' | '/privacy' | '/wall' | '/write'
+  id: '__root__' | '/' | '/pin' | '/privacy' | '/wall' | '/write'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PinRoute: typeof PinRoute
+  PrivacyRoute: typeof PrivacyRoute
   WallRoute: typeof WallRoute
   WriteRoute: typeof WriteRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/wall'
       fullPath: '/wall'
       preLoaderRoute: typeof WallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pin': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PinRoute: PinRoute,
+  PrivacyRoute: PrivacyRoute,
   WallRoute: WallRoute,
   WriteRoute: WriteRoute,
 }
