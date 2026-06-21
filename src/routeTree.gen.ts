@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as WriteRouteImport } from './routes/write'
 import { Route as WallRouteImport } from './routes/wall'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResourcesRouteImport } from './routes/resources'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PinRouteImport } from './routes/pin'
@@ -25,6 +26,11 @@ const WriteRoute = WriteRouteImport.update({
 const WallRoute = WallRouteImport.update({
   id: '/wall',
   path: '/wall',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/pin': typeof PinRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
@@ -68,6 +75,7 @@ export interface FileRoutesByTo {
   '/pin': typeof PinRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
@@ -78,6 +86,7 @@ export interface FileRoutesById {
   '/pin': typeof PinRoute
   '/privacy': typeof PrivacyRoute
   '/resources': typeof ResourcesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/wall': typeof WallRoute
   '/write': typeof WriteRoute
 }
@@ -89,10 +98,19 @@ export interface FileRouteTypes {
     | '/pin'
     | '/privacy'
     | '/resources'
+    | '/sitemap.xml'
     | '/wall'
     | '/write'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/pin' | '/privacy' | '/resources' | '/wall' | '/write'
+  to:
+    | '/'
+    | '/about'
+    | '/pin'
+    | '/privacy'
+    | '/resources'
+    | '/sitemap.xml'
+    | '/wall'
+    | '/write'
   id:
     | '__root__'
     | '/'
@@ -100,6 +118,7 @@ export interface FileRouteTypes {
     | '/pin'
     | '/privacy'
     | '/resources'
+    | '/sitemap.xml'
     | '/wall'
     | '/write'
   fileRoutesById: FileRoutesById
@@ -110,6 +129,7 @@ export interface RootRouteChildren {
   PinRoute: typeof PinRoute
   PrivacyRoute: typeof PrivacyRoute
   ResourcesRoute: typeof ResourcesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   WallRoute: typeof WallRoute
   WriteRoute: typeof WriteRoute
 }
@@ -128,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/wall'
       fullPath: '/wall'
       preLoaderRoute: typeof WallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/resources': {
@@ -174,6 +201,7 @@ const rootRouteChildren: RootRouteChildren = {
   PinRoute: PinRoute,
   PrivacyRoute: PrivacyRoute,
   ResourcesRoute: ResourcesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   WallRoute: WallRoute,
   WriteRoute: WriteRoute,
 }
