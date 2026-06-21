@@ -83,7 +83,7 @@ function LetterPage() {
           <p className="hand text-lg text-plum mt-3">{item.label}</p>
 
           <div className="mt-10 space-y-6 serif text-[1.18rem] md:text-[1.25rem] leading-[1.75] text-foreground/95 whitespace-pre-line">
-            {paragraphs.map((p, i) => (
+            {paragraphs.map((p: string, i: number) => (
               <p key={i}>{p}</p>
             ))}
           </div>
