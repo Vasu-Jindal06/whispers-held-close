@@ -22,13 +22,23 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
     attach === "pin" ? "pin-top" :
     "";
 
+  const kindLabel: Record<string, string> = {
+    letter: "archive entry",
+    confession: "left here anonymously",
+    advice: "to my younger self",
+    truth: "myth to debunk",
+    hope: "a hope",
+    family: "to my family",
+  };
+
   return (
     <article
       className={cn(
-        "note-card relative p-6 md:p-7 transition-transform duration-500 ease-out hover:-translate-y-1 hover:rotate-0 paper-grain paper-settle",
+        "note-card relative p-6 md:p-7 stack-lift paper-grain paper-settle",
         toneBg[tone],
         attachClass,
-        isLetter ? "md:p-9 pt-9 md:pt-12" : "",
+        isLetter ? "md:p-9 pt-9 md:pt-12 ruled-paper" : "",
+        item.kind === "confession" ? "torn-bottom pb-9" : "",
       )}
       style={{ transform: `rotate(${item.rotate ?? 0}deg)`, ['--rot' as never]: `${item.rotate ?? 0}deg` }}
     >
@@ -41,6 +51,11 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
           className="pointer-events-none absolute -top-5 left-6 w-7 md:w-9 rotate-[18deg] drop-shadow-[0_3px_4px_rgba(0,0,0,0.18)] select-none"
         />
       )}
+
+      <span className="hand text-[0.8rem] text-plum/70 label-press absolute top-2 right-3 select-none">
+        {kindLabel[item.kind] ?? "left here"}
+      </span>
+
 
       <div className="flex items-center justify-between mb-3">
         <span className="hand text-base text-plum">{item.label}</span>
