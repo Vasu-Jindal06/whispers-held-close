@@ -9,7 +9,38 @@ export type WallItem = {
   rotate?: number;
   attach?: "paperclip" | "tape" | "tape-corner" | "pin";
   fullLetter?: string;
+  collections?: string[];
+  margin?: string;
 };
+
+export type Collection = {
+  key: string;
+  title: string;
+  description: string;
+  tone: "blush" | "lavender" | "teal" | "gold" | "paper";
+};
+
+export const collections: Collection[] = [
+  { key: "younger-self", title: "Letters to my younger self", description: "Things we wish someone had said sooner.", tone: "lavender" },
+  { key: "the-day", title: "The day I came out", description: "The moment, however it happened.", tone: "blush" },
+  { key: "never-told", title: "Things I never told my parents", description: "Undelivered, but not unwritten.", tone: "gold" },
+  { key: "acceptance", title: "What acceptance felt like", description: "The moments that made room.", tone: "teal" },
+  { key: "figuring", title: "Still figuring it out", description: "You don't need a conclusion to belong here.", tone: "paper" },
+  { key: "future", title: "A future I hope for", description: "What we're writing toward.", tone: "blush" },
+];
+
+export const marqueeLines = [
+  "I'm still figuring it out.",
+  "I thought I had to wait to be brave.",
+  "Some truths are easier to write than say aloud.",
+  "I wish my family knew this wasn't a phase.",
+  "Questioning is a full identity.",
+  "You do not owe anyone a conclusion.",
+  "I wrote it down before I could say it.",
+  "Some rooms you arrive in already understood.",
+  "anon, 24",
+  "I rehearsed it for three years.",
+];
 
 export const wallItems: WallItem[] = [
   {
