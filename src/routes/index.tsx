@@ -52,6 +52,7 @@ function HomePage() {
   return (
     <SiteShell>
       <Hero />
+      <Marquee />
       <TrustBlock />
       <CategoriesBlock />
       <ArchivePreview />
@@ -60,6 +61,24 @@ function HomePage() {
       <WhyBlock />
       <FinalCTA />
     </SiteShell>
+  );
+}
+
+function Marquee() {
+  const items = [...marqueeLines, ...marqueeLines];
+  return (
+    <section className="bg-paper-deep/60 border-y border-border/50 overflow-hidden marquee-pause">
+      <div className="marquee-mask py-5">
+        <div className="marquee-track flex gap-10 whitespace-nowrap w-max">
+          {items.map((line, i) => (
+            <span key={i} className="serif italic text-lg md:text-xl text-ink/80 inline-flex items-center gap-10">
+              "{line}"
+              <span aria-hidden className="text-plum/60">·</span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
