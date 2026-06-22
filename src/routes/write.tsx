@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import paperclipImg from "@/assets/paperclip.png";
 
 export const Route = createFileRoute("/write")({
@@ -48,13 +48,22 @@ function WritePage() {
   const [submitted, setSubmitted] = useState(false);
   const [cats, setCats] = useState<string[]>([]);
   const [identity, setIdentity] = useState("Anonymous");
+  const [credit, setCredit] = useState("");
   const [perms, setPerms] = useState<string[]>(["Website archive"]);
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
   const [agree3, setAgree3] = useState(false);
 
-  const toggle = (arr: string[], v: string, setter: (a: string[]) => void) =>
+  const isPrivate = identity === "Keep private — do not publish";
+
+  useEffect(() => {
+    if (isPrivate) setPerms(["Internal reading only"]);
+  }, [isPrivate]);
+
+  const toggle = (arr: string[], v: string, setter: (a: string[]) => void) => {
+    if (arr === perms && isPrivate && v !== "Internal reading only") return;
     setter(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
+  };
 
   if (submitted) return <ThankYou kind="letter" />;
 
@@ -97,15 +106,25 @@ function WritePage() {
                 <RadioCard key={o} name="identity" value={o} checked={identity === o} onChange={() => setIdentity(o)} />
               ))}
             </div>
+            <CreditField identity={identity} value={credit} onChange={setCredit} />
           </Section>
 
           <Section number="03" title="Where may we share this, if selected?" hint="Tick only the places that feel okay. You can change this later.">
             <div className="grid sm:grid-cols-2 gap-2">
-              {permissionOptions.map((o) => (
-                <CheckCard key={o} checked={perms.includes(o)} onChange={() => toggle(perms, o, setPerms)} label={o} />
-              ))}
+              {permissionOptions.map((o) => {
+                const disabled = isPrivate && o !== "Internal reading only";
+                return (
+                  <CheckCard key={o} checked={perms.includes(o)} disabled={disabled} onChange={() => toggle(perms, o, setPerms)} label={o} />
+                );
+              })}
             </div>
+            {isPrivate && (
+              <p className="mt-3 text-sm text-ink-soft italic leading-relaxed">
+                Since you've chosen to keep this private, it won't be shared publicly.
+              </p>
+            )}
           </Section>
+
 
           <Section number="04" title="The letter itself" hint="One paragraph or many. Write the way you'd write to one person.">
             <input
@@ -196,14 +215,47 @@ function RadioCard({ name, value, checked, onChange }: { name: string; value: st
   );
 }
 
-function CheckCard({ checked, onChange, label }: { checked: boolean; onChange: () => void; label: string }) {
+function CheckCard({ checked, onChange, label, disabled = false }: { checked: boolean; onChange: () => void; label: string; disabled?: boolean }) {
   return (
-    <label className={`flex items-center gap-3 px-4 py-3 rounded-md border cursor-pointer transition ${checked ? "border-plum bg-plum/5" : "border-ink/15 hover:border-ink/30"}`}>
-      <input type="checkbox" checked={checked} onChange={onChange} className="accent-plum" />
-      <span className="text-sm">{label}</span>
+    <label className={`flex items-center gap-3 px-4 py-3 rounded-md border transition ${
+      disabled ? "border-ink/10 bg-ink/5 cursor-not-allowed opacity-50" :
+      checked ? "border-plum bg-plum/5 cursor-pointer" : "border-ink/15 hover:border-ink/30 cursor-pointer"
+    }`}>
+      <input type="checkbox" checked={checked} onChange={onChange} disabled={disabled} className="accent-plum" />
+      <span className={`text-sm ${disabled ? "line-through" : ""}`}>{label}</span>
     </label>
   );
 }
+
+const creditConfig: Record<string, { placeholder?: string; max?: number; note?: string }> = {
+  "Anonymous": { note: "Your letter will appear as 'anon'." },
+  "Initials only": { placeholder: "e.g. R.K.", max: 6 },
+  "First name only": { placeholder: "e.g. Priya" },
+  "Pseudonym": { placeholder: "Any name that feels right" },
+  "Full name": { placeholder: "Your full name" },
+  "Keep private — do not publish": { note: "This will only be read by our team. It won't appear anywhere publicly." },
+};
+
+function CreditField({ identity, value, onChange }: { identity: string; value: string; onChange: (v: string) => void }) {
+  const cfg = creditConfig[identity];
+  if (!cfg) return null;
+  return (
+    <div className="mt-4">
+      {cfg.placeholder && (
+        <input
+          type="text"
+          value={value}
+          maxLength={cfg.max}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={cfg.placeholder}
+          className="w-full sm:w-1/2 bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60"
+        />
+      )}
+      {cfg.note && <p className="text-xs text-ink-soft italic leading-relaxed">{cfg.note}</p>}
+    </div>
+  );
+}
+
 
 function Field({ label, placeholder, className = "" }: { label: string; placeholder: string; className?: string }) {
   return (
