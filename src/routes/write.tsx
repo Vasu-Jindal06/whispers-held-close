@@ -106,15 +106,25 @@ function WritePage() {
                 <RadioCard key={o} name="identity" value={o} checked={identity === o} onChange={() => setIdentity(o)} />
               ))}
             </div>
+            <CreditField identity={identity} value={credit} onChange={setCredit} />
           </Section>
 
           <Section number="03" title="Where may we share this, if selected?" hint="Tick only the places that feel okay. You can change this later.">
             <div className="grid sm:grid-cols-2 gap-2">
-              {permissionOptions.map((o) => (
-                <CheckCard key={o} checked={perms.includes(o)} onChange={() => toggle(perms, o, setPerms)} label={o} />
-              ))}
+              {permissionOptions.map((o) => {
+                const disabled = isPrivate && o !== "Internal reading only";
+                return (
+                  <CheckCard key={o} checked={perms.includes(o)} disabled={disabled} onChange={() => toggle(perms, o, setPerms)} label={o} />
+                );
+              })}
             </div>
+            {isPrivate && (
+              <p className="mt-3 text-sm text-ink-soft italic leading-relaxed">
+                Since you've chosen to keep this private, it won't be shared publicly.
+              </p>
+            )}
           </Section>
+
 
           <Section number="04" title="The letter itself" hint="One paragraph or many. Write the way you'd write to one person.">
             <input
