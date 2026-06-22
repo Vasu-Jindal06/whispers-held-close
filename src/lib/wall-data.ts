@@ -223,3 +223,12 @@ export const voicesBeyond: VoiceBeyond[] = [
     context: "USA · 1934–1992",
   },
 ];
+
+export const collectionMembers: Record<string, string[]> = {
+  "younger-self": ["3", "9", "8"],
+  "the-day": ["1", "2"],
+  "never-told": ["1", "4", "7", "12"],
+  "acceptance": ["1", "8", "12"],
+  "figuring": ["2", "7", "10"],
+  "future": ["6", "11"],
+};
