@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import paperclipImg from "@/assets/paperclip.png";
 
 export const Route = createFileRoute("/write")({
