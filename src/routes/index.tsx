@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import paperclipImg from "@/assets/paperclip.png";
 import stampImg from "@/assets/stamp.png";
 import flowerImg from "@/assets/flower.png";
+import { supabase } from "@/integrations/supabase/client";
+import { categoryMap } from "./write";
+import type { WallItem } from "@/lib/wall-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -284,7 +287,75 @@ function CategoriesBlock() {
 }
 
 function ArchivePreview() {
-  const preview = wallItems.slice(0, 6);
+  const [preview, setPreview] = useState<WallItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPreview() {
+      setLoading(true);
+      try {
+        const [lettersRes, notesRes] = await Promise.all([
+          supabase.from('letters').select('*').eq('status', 'approved').eq('allow_public_display', true).limit(4),
+          supabase.from('notes').select('*').eq('status', 'approved').eq('allow_public_display', true).limit(4)
+        ]);
+
+        const lettersData = lettersRes.data || [];
+        const notesData = notesRes.data || [];
+
+        const tones = ["blush", "lavender", "teal", "gold", "paper"];
+        const attaches = ["paperclip", "tape", "tape-corner", "pin"];
+
+        const mappedLetters: WallItem[] = lettersData.map(l => {
+           const idHash = l.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+           return {
+             id: l.id,
+             kind: "letter",
+             label: categoryMap[l.category] || "Archive Entry",
+             title: l.title,
+             body: l.body,
+             author: l.display_name || "Anonymous",
+             fullLetter: true,
+             tone: tones[idHash % tones.length] as any,
+             attach: attaches[idHash % attaches.length] as any,
+             rotate: (idHash % 7) - 3,
+             featured: l.featured,
+             created_at: l.created_at
+           };
+        });
+
+        const mappedNotes: WallItem[] = notesData.map(n => {
+           const idHash = n.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+           return {
+             id: n.id,
+             kind: n.category || "confession",
+             label: categoryMap[n.category] || "Note",
+             body: n.note_text,
+             author: n.display_name || "Anonymous",
+             tone: tones[idHash % tones.length] as any,
+             attach: attaches[idHash % attaches.length] as any,
+             rotate: (idHash % 7) - 3,
+             featured: n.featured,
+             created_at: n.created_at
+           };
+        });
+
+        let combined = [...mappedLetters, ...mappedNotes].sort((a, b) => 
+          new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()
+        );
+        
+        // prioritize featured
+        combined = combined.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+        
+        setPreview(combined.slice(0, 6));
+      } catch (e) {
+        console.error("Error fetching preview:", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPreview();
+  }, []);
+
   return (
     <section className="bg-paper-deep/40 border-y border-border/60">
       <div className="mx-auto max-w-6xl px-6 py-24">
@@ -299,11 +370,20 @@ function ArchivePreview() {
             See the whole wall →
           </Link>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-          {preview.map((item) => (
-            <WallCard key={item.id} item={item} dense />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-10">
+             <p className="text-ink-soft animate-pulse">Loading preview...</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            {preview.map((item) => (
+              <WallCard key={item.id} item={item} dense />
+            ))}
+            {preview.length === 0 && (
+              <p className="text-ink-soft col-span-full">No public entries yet.</p>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );

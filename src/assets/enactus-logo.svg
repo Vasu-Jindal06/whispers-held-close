@@ -1,0 +1,14 @@
+<svg width="40" height="40" viewBox="0 0 130 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Left Tail -->
+  <path d="M47 81 L13 81 L47 115 Z" fill="#F0A810" />
+  <!-- Shadow for Left Tail -->
+  <path d="M47 81 L43 81 L47 115 Z" fill="black" opacity="0.08" />
+
+  <!-- Main Body -->
+  <path d="M47 15 L97 65 L47 115 Z" fill="#FFC222" />
+
+  <!-- Right Head -->
+  <path d="M97 65 L113 81 L81 81 Z" fill="#FFCE44" />
+  <!-- Shadow for Right Head -->
+  <path d="M97 65 L81 81 L99 67 Z" fill="black" opacity="0.08" />
+</svg>

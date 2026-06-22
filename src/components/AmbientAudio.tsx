@@ -79,7 +79,7 @@ export function AmbientAudio() {
         className={`inline-block w-2 h-2 rounded-full transition ${on ? "bg-plum animate-pulse" : "bg-ink/25"}`}
         aria-hidden
       />
-      <span className="hand text-base text-plum">{on ? "ambient on" : "play while reading"}</span>
+      <span className="hand text-base text-plum">{on ? "ambient on" : "play ambient audio"}</span>
     </button>
   );
 }

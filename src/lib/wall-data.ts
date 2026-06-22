@@ -1,6 +1,6 @@
 export type WallItem = {
   id: string;
-  kind: "letter" | "confession" | "advice" | "truth" | "hope" | "family";
+  kind: string;
   label: string;
   title?: string;
   body: string;
@@ -8,9 +8,11 @@ export type WallItem = {
   tone?: "blush" | "lavender" | "teal" | "gold" | "paper";
   rotate?: number;
   attach?: "paperclip" | "tape" | "tape-corner" | "pin";
-  fullLetter?: string;
+  fullLetter?: string | boolean;
   collections?: string[];
   margin?: string;
+  featured?: boolean;
+  created_at?: string;
 };
 
 export type Collection = {

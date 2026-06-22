@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { useEffect, useState } from "react";
 import paperclipImg from "@/assets/paperclip.png";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/write")({
   head: () => ({
@@ -15,16 +16,16 @@ export const Route = createFileRoute("/write")({
   component: WritePage,
 });
 
-const categoryOptions = [
-  "Coming out story",
-  "Acceptance / rejection",
-  "Advice to younger queer people",
-  "Message to family",
-  "Ally perspective",
-  "Myth to debunk",
-  "Hope for the future",
-  "Something else",
-];
+export const categoryMap: Record<string, string> = {
+  "coming_out_story": "Coming out story",
+  "acceptance_rejection": "Acceptance / rejection",
+  "younger_self": "Advice to younger queer people",
+  "message_to_family": "Message to family",
+  "anonymous_confession": "Anonymous confession",
+  "ally_experience": "Ally perspective",
+  "myth_to_debunk": "Myth to debunk",
+  "hope_for_future": "Hope for the future",
+};
 
 const identityOptions = [
   "Anonymous",
@@ -35,21 +36,30 @@ const identityOptions = [
   "Keep private — do not publish",
 ];
 
-const permissionOptions = [
-  "Website archive",
-  "Instagram post / carousel",
-  "Quote card",
-  "Voiceover reel",
-  "Event digital wall",
-  "Internal reading only",
-];
+const permissionMap: Record<string, string> = {
+  "consent_website": "Website archive",
+  "consent_instagram": "Instagram post / carousel",
+  "consent_quote_cards": "Quote card",
+  "consent_reels": "Voiceover reel",
+  "internal": "Internal reading only",
+};
 
 function WritePage() {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
   const [cats, setCats] = useState<string[]>([]);
   const [identity, setIdentity] = useState("Anonymous");
   const [credit, setCredit] = useState("");
-  const [perms, setPerms] = useState<string[]>(["Website archive"]);
+  
+  const [perms, setPerms] = useState<string[]>(["consent_website"]);
+  
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [pronouns, setPronouns] = useState("");
+  const [age, setAge] = useState("");
+  const [location, setLocation] = useState("");
+
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
   const [agree3, setAgree3] = useState(false);
@@ -57,12 +67,50 @@ function WritePage() {
   const isPrivate = identity === "Keep private — do not publish";
 
   useEffect(() => {
-    if (isPrivate) setPerms(["Internal reading only"]);
+    if (isPrivate) setPerms(["internal"]);
   }, [isPrivate]);
 
   const toggle = (arr: string[], v: string, setter: (a: string[]) => void) => {
-    if (arr === perms && isPrivate && v !== "Internal reading only") return;
+    if (arr === perms && isPrivate && v !== "internal") return;
     setter(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const isAnonymous = identity === "Anonymous" || isPrivate;
+    let displayName = isAnonymous ? "Anonymous" : credit;
+    if (!isAnonymous && !credit) {
+       displayName = identity; 
+    }
+
+    try {
+      const { error } = await supabase.from('letters').insert({
+        category: cats.length > 0 ? cats[0] : null,
+        title: title || null,
+        body: body,
+        display_name: displayName,
+        is_anonymous: isAnonymous,
+        age: age || null,
+        pronouns: pronouns || null,
+        location: location || null,
+        consent_website: perms.includes("consent_website"),
+        consent_instagram: perms.includes("consent_instagram"),
+        consent_reels: perms.includes("consent_reels"),
+        consent_quote_cards: perms.includes("consent_quote_cards"),
+        allow_public_display: !isPrivate && perms.includes("consent_website"),
+        allow_editing_for_length: agree3,
+        status: "pending"
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong saving your letter. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) return <ThankYou kind="letter" />;
@@ -82,7 +130,7 @@ function WritePage() {
         </div>
 
         <form
-          onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+          onSubmit={handleSubmit}
           className="paper-card paper-grain p-8 md:p-12 space-y-10 relative"
         >
           <img
@@ -94,8 +142,8 @@ function WritePage() {
           <div className="absolute top-5 right-6 eyebrow text-[0.6rem]">letter draft · 001</div>
           <Section number="01" title="What are you sharing?" hint="Pick one or more — or none if it doesn't fit a box.">
             <div className="flex flex-wrap gap-2">
-              {categoryOptions.map((c) => (
-                <Chip key={c} active={cats.includes(c)} onClick={() => toggle(cats, c, setCats)}>{c}</Chip>
+              {Object.entries(categoryMap).map(([k, label]) => (
+                <Chip key={k} active={cats.includes(k)} onClick={() => toggle(cats, k, setCats)}>{label}</Chip>
               ))}
             </div>
           </Section>
@@ -111,10 +159,10 @@ function WritePage() {
 
           <Section number="03" title="Where may we share this, if selected?" hint="Tick only the places that feel okay. You can change this later.">
             <div className="grid sm:grid-cols-2 gap-2">
-              {permissionOptions.map((o) => {
-                const disabled = isPrivate && o !== "Internal reading only";
+              {Object.entries(permissionMap).map(([k, label]) => {
+                const disabled = isPrivate && k !== "internal";
                 return (
-                  <CheckCard key={o} checked={perms.includes(o)} disabled={disabled} onChange={() => toggle(perms, o, setPerms)} label={o} />
+                  <CheckCard key={k} checked={perms.includes(k)} disabled={disabled} onChange={() => toggle(perms, k, setPerms)} label={label} />
                 );
               })}
             </div>
@@ -129,37 +177,35 @@ function WritePage() {
           <Section number="04" title="The letter itself" hint="One paragraph or many. Write the way you'd write to one person.">
             <input
               type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder="Optional title — e.g. 'to my mother' or 'the part I never said'"
               className="w-full bg-transparent border-b border-ink/20 focus:border-plum outline-none py-3 serif text-2xl placeholder:text-ink-soft/60"
             />
             <textarea
               required
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
               rows={14}
               placeholder="Start anywhere. There is no right way to begin."
               className="mt-6 w-full bg-paper-deep/40 border border-ink/10 rounded-md p-5 text-foreground leading-relaxed focus:outline-none focus:border-plum/60 resize-y"
               style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem" }}
             />
-            <div className="grid sm:grid-cols-2 gap-4 mt-4">
-              <textarea rows={2} placeholder="A note to the team (optional)" className="bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60" />
-              <input type="text" placeholder="Content warning to add (optional)" className="bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60" />
-            </div>
           </Section>
 
           <Section number="05" title="Optional context" hint="Everything here is optional. Skip whatever you'd rather not say.">
             <div className="grid sm:grid-cols-2 gap-3">
-              <Field label="Pronouns" placeholder="she/her, they/them…" />
-              <Field label="Age range" placeholder="18–24, 25–34…" />
-              <Field label="City / country" placeholder="Mumbai, India" />
-              <Field label="Out to…" placeholder="family / friends / no one / online only / prefer not to say" />
-              <Field label="Email — only if you'd like us to contact you before publishing" placeholder="you@example.com" className="sm:col-span-2" />
+              <Field value={pronouns} onChange={setPronouns} label="Pronouns" placeholder="she/her, they/them…" />
+              <Field value={age} onChange={setAge} label="Age range" placeholder="18–24, 25–34…" />
+              <Field value={location} onChange={setLocation} label="City / country" placeholder="Mumbai, India" />
             </div>
           </Section>
 
           <Section number="06" title="Review & consent" hint="A small pause before sending.">
             <div className="bg-paper-deep/40 border border-ink/10 rounded-md p-5 text-sm space-y-2">
-              <p><span className="text-ink-soft">Category:</span> {cats.length ? cats.join(", ") : <em className="text-ink-soft">none chosen</em>}</p>
+              <p><span className="text-ink-soft">Category:</span> {cats.length ? cats.map(c => categoryMap[c]).join(", ") : <em className="text-ink-soft">none chosen</em>}</p>
               <p><span className="text-ink-soft">Credited as:</span> {identity}</p>
-              <p><span className="text-ink-soft">May appear on:</span> {perms.length ? perms.join(", ") : <em className="text-ink-soft">nowhere — kept private</em>}</p>
+              <p><span className="text-ink-soft">May appear on:</span> {perms.length ? perms.map(p => permissionMap[p]).join(", ") : <em className="text-ink-soft">nowhere — kept private</em>}</p>
             </div>
             <div className="mt-5 space-y-3">
               <Consent checked={agree1} onChange={setAgree1} label="I confirm this is my story or perspective to share." />
@@ -172,10 +218,10 @@ function WritePage() {
             <Link to="/privacy" className="text-sm text-plum underline underline-offset-4">How privacy actually works →</Link>
             <button
               type="submit"
-              disabled={!(agree1 && agree2 && agree3)}
+              disabled={!(agree1 && agree2 && agree3) || loading}
               className="px-7 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Leave this Letter Here
+              {loading ? "Sending..." : "Leave this Letter Here"}
             </button>
           </div>
         </form>
@@ -256,12 +302,11 @@ function CreditField({ identity, value, onChange }: { identity: string; value: s
   );
 }
 
-
-function Field({ label, placeholder, className = "" }: { label: string; placeholder: string; className?: string }) {
+function Field({ label, placeholder, value, onChange, className = "" }: { label: string; placeholder: string; value: string; onChange: (v: string) => void; className?: string }) {
   return (
     <label className={`block ${className}`}>
       <span className="text-xs text-ink-soft block mb-1.5">{label}</span>
-      <input type="text" placeholder={placeholder} className="w-full bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60" />
+      <input type="text" value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60" />
     </label>
   );
 }

@@ -4,9 +4,27 @@ import { wallItems } from "@/lib/wall-data";
 import paperclipImg from "@/assets/paperclip.png";
 import stampImg from "@/assets/stamp.png";
 
+import { supabase } from "@/integrations/supabase/client";
+import { categoryMap } from "./write";
+
 export const Route = createFileRoute("/letter/$id")({
-  loader: ({ params }) => {
-    const item = wallItems.find((i) => i.id === params.id && i.fullLetter);
+  loader: async ({ params }) => {
+    let item = wallItems.find((i) => i.id === params.id && i.fullLetter);
+    if (!item) {
+      const { data } = await supabase.from('letters').select('*').eq('id', params.id).eq('status', 'approved').single();
+      if (data) {
+        item = {
+          id: data.id,
+          kind: "letter",
+          label: categoryMap[data.category] || "Archive Entry",
+          title: data.title,
+          body: data.body,
+          author: data.display_name || "Anonymous",
+          fullLetter: data.body,
+          tone: "paper",
+        };
+      }
+    }
     if (!item) throw notFound();
     return { item };
   },
@@ -47,7 +65,8 @@ export const Route = createFileRoute("/letter/$id")({
 
 function LetterPage() {
   const { item } = Route.useLoaderData();
-  const paragraphs = (item.fullLetter ?? item.body).split(/\n\s*\n/);
+  const textContent = typeof item.fullLetter === "string" ? item.fullLetter : item.body;
+  const paragraphs = textContent.split(/\n\s*\n/);
 
   return (
     <SiteShell>

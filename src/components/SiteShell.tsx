@@ -22,15 +22,15 @@ export function SiteShell({ children }: { children: ReactNode }) {
   );
 }
 
+import logoUrl from '../assets/enactus-logo.svg';
+
 function Logo() {
   return (
-    <span
-      aria-hidden
-      className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-ink/30 text-[0.6rem] tracking-[0.18em] font-medium text-ink-soft bg-paper-deep/40"
-      title="Enactus VIT Chennai"
-    >
-      EV
-    </span>
+    <img 
+      src={logoUrl} 
+      alt="Enactus VIT Chennai Logo" 
+      className="w-10 h-10 object-contain drop-shadow-sm opacity-90"
+    />
   );
 }
 
@@ -98,6 +98,14 @@ function Footer() {
             <li><Link to="/privacy" className="hover:text-foreground text-ink-soft">Privacy & Consent</Link></li>
             <li><Link to="/about" className="hover:text-foreground text-ink-soft">About the Campaign</Link></li>
             <li><a href="mailto:lettersleft@enactus.org" className="hover:text-foreground text-ink-soft">Removal requests</a></li>
+          </ul>
+        </div>
+        <div>
+          <p className="eyebrow mb-3">Stay with Enactus VIT Chennai</p>
+          <ul className="space-y-2 text-sm">
+            <li><a href="https://www.instagram.com/enactusvitc/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground text-ink-soft flex items-center gap-2">Instagram</a></li>
+            <li><a href="https://www.linkedin.com/company/enactusvitc/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="hover:text-foreground text-ink-soft flex items-center gap-2">LinkedIn</a></li>
+            <li><a href="mailto:lettersleft@enactus.org" className="hover:text-foreground text-ink-soft flex items-center gap-2">Email Us</a></li>
           </ul>
         </div>
       </div>

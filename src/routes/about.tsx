@@ -24,11 +24,14 @@ function AboutPage() {
 
         <div className="mt-10 space-y-7 text-lg leading-relaxed text-foreground/90">
           <p>
-            Letters Left Here is a Pride Month campaign hosted by{" "}
-            <strong className="text-foreground">Enactus VIT Chennai</strong> to do
-            one thing: hold queer stories carefully. Not flatten them into
-            slogans. Not flatten them into rainbows. Just hold them.
+            <strong className="text-foreground">Letters Left Here</strong> is a Pride Month archive by <strong className="text-foreground">Enactus VIT Chennai</strong>. It is designed to be:
           </p>
+          <ul className="list-disc pl-6 space-y-2">
+            <li>A space for queer voices, letters, confessions, advice, truths, and hopes.</li>
+            <li>A consent-first archive.</li>
+            <li>A wall of words people chose to leave behind.</li>
+            <li>Run by Enactus VIT Chennai as a community storytelling initiative.</li>
+          </ul>
           <p>
             We started this because the loudest version of Pride is not the only
             version. Some people are out, some are not, some are still figuring

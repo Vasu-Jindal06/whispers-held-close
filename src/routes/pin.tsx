@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/pin")({
   head: () => ({
@@ -14,15 +15,14 @@ export const Route = createFileRoute("/pin")({
   component: PinPage,
 });
 
-const noteKinds = ["Confession", "Advice", "Message", "Myth to debunk", "Hope", "One-line truth", "Something else"];
-const prompts: Record<string, string> = {
-  Confession: "Something you've never said aloud.",
-  Advice: "What do you wish someone had told you sooner?",
-  Message: "What do you wish they understood?",
-  "Myth to debunk": "What do people always get wrong?",
-  Hope: "What are you writing toward?",
-  "One-line truth": "Just one true thing.",
-  "Something else": "Whatever it is. Leave it here.",
+const pinCategoryMap: Record<string, { label: string; prompt: string }> = {
+  "anonymous_confession": { label: "Confession", prompt: "Something you've never said aloud." },
+  "younger_self": { label: "Advice", prompt: "What do you wish someone had told you sooner?" },
+  "message_to_family": { label: "Message", prompt: "What do you wish they understood?" },
+  "myth_to_debunk": { label: "Myth to debunk", prompt: "What do people always get wrong?" },
+  "hope_for_future": { label: "Hope", prompt: "What are you writing toward?" },
+  "one_line_truth": { label: "One-line truth", prompt: "Just one true thing." },
+  "other": { label: "Something else", prompt: "Whatever it is. Leave it here." },
 };
 
 const identityOptions = ["Anonymous", "Initials only", "First name only", "Pseudonym", "Full name", "Private — do not publish"] as const;
@@ -37,27 +37,66 @@ const identityHelp: Record<Identity, { placeholder?: string; max?: number; note?
   "Private — do not publish": { note: "This will only be read by our team. It won't appear anywhere publicly." },
 };
 
-const permOptions = ["Website archive", "Instagram", "Quote card", "Internal only"] as const;
+const permissionMap: Record<string, string> = {
+  "consent_website": "Website archive",
+  "consent_instagram": "Instagram",
+  "consent_quote_cards": "Quote card",
+  "consent_reels": "Reels",
+  "internal": "Internal only",
+};
 
 function PinPage() {
-  const [kind, setKind] = useState("Confession");
+  const [kind, setKind] = useState("anonymous_confession");
   const [text, setText] = useState("");
   const [identity, setIdentity] = useState<Identity>("Anonymous");
   const [credit, setCredit] = useState("");
-  const [perms, setPerms] = useState<string[]>(["Website archive"]);
+  const [perms, setPerms] = useState<string[]>(["consent_website"]);
   const [agree, setAgree] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const isPrivate = identity === "Private — do not publish";
 
-  // when private, force only "Internal only"
   useEffect(() => {
-    if (isPrivate) setPerms(["Internal only"]);
+    if (isPrivate) setPerms(["internal"]);
   }, [isPrivate]);
 
   const toggle = (v: string) => {
-    if (isPrivate && v !== "Internal only") return;
+    if (isPrivate && v !== "internal") return;
     setPerms(perms.includes(v) ? perms.filter((x) => x !== v) : [...perms, v]);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const isAnonymous = identity === "Anonymous" || isPrivate;
+    let displayName = isAnonymous ? "Anonymous" : credit;
+    if (!isAnonymous && !credit) {
+       displayName = identity; 
+    }
+
+    try {
+      const { error } = await supabase.from('notes').insert({
+        category: kind,
+        note_text: text,
+        display_name: displayName,
+        is_anonymous: isAnonymous,
+        consent_website: perms.includes("consent_website"),
+        consent_instagram: perms.includes("consent_instagram"),
+        consent_reels: perms.includes("consent_reels"),
+        consent_quote_cards: perms.includes("consent_quote_cards"),
+        allow_public_display: !isPrivate && perms.includes("consent_website"),
+        status: "pending"
+      });
+      if (error) throw error;
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong saving your note. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (submitted) {
@@ -77,6 +116,7 @@ function PinPage() {
   }
 
   const help = identityHelp[identity];
+  const activePrompt = pinCategoryMap[kind]?.prompt || "What's on your mind?";
 
   return (
     <SiteShell>
@@ -87,22 +127,22 @@ function PinPage() {
           <p className="mt-5 text-ink-soft max-w-xl mx-auto">One line. A confession. A hope. A truth you've been carrying around in your pocket.</p>
         </div>
 
-        <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
+        <form onSubmit={handleSubmit}
           className="note-card tape-strip tape-blush p-8 md:p-10 bg-[color:color-mix(in_oklab,var(--blush)_18%,var(--card))] space-y-8">
           <div>
             <span className="hand text-base text-plum">what kind of note is this?</span>
             <div className="mt-3 flex flex-wrap gap-2">
-              {noteKinds.map((k) => (
+              {Object.entries(pinCategoryMap).map(([k, { label }]) => (
                 <button type="button" key={k} onClick={() => setKind(k)}
                   className={`px-3.5 py-1.5 rounded-full text-sm border transition ${kind === k ? "bg-foreground text-background border-foreground" : "border-ink/20 text-ink-soft hover:text-foreground hover:border-foreground/50"}`}>
-                  {k}
+                  {label}
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <span className="hand text-base text-plum">{prompts[kind]}</span>
+            <span className="hand text-base text-plum">{activePrompt}</span>
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -140,16 +180,16 @@ function PinPage() {
             <div>
               <span className="eyebrow block mb-2">May appear on</span>
               <div className="flex flex-wrap gap-2">
-                {permOptions.map((p) => {
-                  const disabled = isPrivate && p !== "Internal only";
-                  const active = perms.includes(p);
+                {Object.entries(permissionMap).map(([k, label]) => {
+                  const disabled = isPrivate && k !== "internal";
+                  const active = perms.includes(k);
                   return (
-                    <button type="button" key={p} onClick={() => toggle(p)} disabled={disabled}
+                    <button type="button" key={k} onClick={() => toggle(k)} disabled={disabled}
                       className={`px-3 py-1.5 rounded-full text-xs border transition ${
                         disabled ? "border-ink/10 text-ink-soft/40 line-through cursor-not-allowed" :
                         active ? "bg-plum/10 border-plum text-foreground" : "border-ink/20 text-ink-soft hover:border-foreground/40"
                       }`}>
-                      {p}
+                      {label}
                     </button>
                   );
                 })}
@@ -169,9 +209,9 @@ function PinPage() {
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Link to="/privacy" className="text-sm text-plum underline underline-offset-4">How privacy works →</Link>
-            <button type="submit" disabled={!agree || !text}
+            <button type="submit" disabled={!agree || !text || loading}
               className="px-7 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed">
-              Pin this Note
+              {loading ? "Sending..." : "Pin this Note"}
             </button>
           </div>
         </form>
