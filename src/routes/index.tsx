@@ -122,21 +122,46 @@ function Hero() {
         </div>
 
         {/* RIGHT — tactile archive collage */}
-        <div className="md:col-span-5 relative min-h-[460px] md:min-h-[560px]">
-          {/* back postcard */}
+        <div className="md:col-span-5 relative min-h-[520px] md:min-h-[600px]">
+          {/* back kraft envelope */}
           <div
-            className="absolute top-10 right-2 w-[78%] h-44 bg-[color:color-mix(in_oklab,var(--gold)_22%,var(--card))] paper-grain note-card paper-settle"
-            style={{ transform: "rotate(-6deg)", ['--rot' as never]: "-6deg" }}
+            className="absolute top-16 right-0 w-[80%] h-52 rounded-sm paper-grain paper-settle"
+            style={{
+              transform: "rotate(-7deg)",
+              ['--rot' as never]: "-7deg",
+              background: "color-mix(in oklab, var(--gold) 35%, #d9c39a)",
+              boxShadow: "0 20px 40px -28px color-mix(in oklab, var(--ink) 40%, transparent), inset 0 0 0 1px color-mix(in oklab, var(--ink) 8%, transparent)",
+              animationDelay: "0ms",
+            }}
             aria-hidden
           >
-            <div className="absolute inset-3 border border-dashed border-ink/15" />
-            <span className="absolute top-3 right-3 eyebrow text-[0.55rem]">postcard · 1.0</span>
+            {/* envelope flap */}
+            <div
+              className="absolute top-0 left-0 right-0 h-1/2"
+              style={{ clipPath: "polygon(0 0, 100% 0, 50% 100%)", background: "color-mix(in oklab, var(--gold) 50%, #b89a6a)", opacity: 0.55 }}
+            />
+            <span className="hand text-base text-ink/60 absolute bottom-4 left-5">to: you</span>
+          </div>
+
+          {/* lined paper strip behind */}
+          <div
+            className="absolute top-4 right-12 w-[55%] h-32 paper-grain ruled-paper torn-bottom paper-settle"
+            style={{
+              transform: "rotate(5deg)",
+              ['--rot' as never]: "5deg",
+              background: "color-mix(in oklab, var(--paper-deep) 90%, white)",
+              boxShadow: "0 12px 28px -20px color-mix(in oklab, var(--ink) 30%, transparent)",
+              animationDelay: "80ms",
+            }}
+            aria-hidden
+          >
+            <span className="hand text-sm text-plum/70 absolute top-2 left-3">only written, never sent</span>
           </div>
 
           {/* main featured letter */}
           <article
-            className="absolute top-0 left-0 w-[88%] paper-card paper-grain p-7 md:p-8 paper-settle"
-            style={{ transform: "rotate(-1.5deg)", ['--rot' as never]: "-1.5deg" }}
+            className="absolute top-0 left-0 w-[88%] paper-card paper-grain p-7 md:p-8 paper-settle stack-lift"
+            style={{ transform: "rotate(-1.5deg)", ['--rot' as never]: "-1.5deg", animationDelay: "160ms" }}
           >
             <img
               src={paperclipImg}
@@ -151,6 +176,19 @@ function Hero() {
               loading="lazy"
               className="pointer-events-none absolute -top-3 right-3 w-16 opacity-75 mix-blend-multiply select-none"
             />
+            {/* postmark circle */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute bottom-6 right-5 w-20 h-20 rounded-full opacity-25 label-press"
+              style={{
+                border: "1.5px dashed color-mix(in oklab, var(--plum) 70%, transparent)",
+                color: "var(--plum)",
+              }}
+            >
+              <div className="absolute inset-0 flex items-center justify-center text-[0.5rem] tracking-[0.2em] text-center leading-tight">
+                PRIDE<br/>ARCHIVE<br/>2026
+              </div>
+            </div>
             <span className="hand text-base text-plum">left here anonymously</span>
             <p key={idx} className="serif text-2xl md:text-[1.7rem] mt-3 leading-snug text-foreground float-in">
               "{rotatingLines[idx]}"
@@ -163,8 +201,8 @@ function Hero() {
 
           {/* small pinned note */}
           <article
-            className="absolute bottom-12 right-0 w-[60%] note-card pin-top paper-grain p-5 bg-[color:color-mix(in_oklab,var(--lavender)_30%,var(--card))] paper-settle"
-            style={{ transform: "rotate(4deg)", ['--rot' as never]: "4deg" }}
+            className="absolute bottom-12 right-0 w-[60%] note-card pin-top paper-grain p-5 bg-[color:color-mix(in_oklab,var(--lavender)_30%,var(--card))] paper-settle stack-lift"
+            style={{ transform: "rotate(4deg)", ['--rot' as never]: "4deg", animationDelay: "240ms" }}
           >
             <span className="hand text-base text-plum">to my younger self</span>
             <p className="mt-2 text-foreground leading-relaxed text-sm">
@@ -180,9 +218,11 @@ function Hero() {
             alt=""
             aria-hidden
             loading="lazy"
-            className="pointer-events-none absolute -bottom-2 -left-4 w-24 md:w-28 opacity-90 rotate-[-20deg] select-none"
+            className="pointer-events-none absolute -bottom-2 -left-4 w-24 md:w-28 opacity-90 rotate-[-20deg] select-none paper-settle"
+            style={{ ['--rot' as never]: "-20deg", animationDelay: "320ms" }}
           />
         </div>
+
       </div>
     </section>
   );
