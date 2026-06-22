@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { WallCard } from "@/components/WallCard";
-import { wallItems, voicesBeyond } from "@/lib/wall-data";
+import { wallItems, voicesBeyond, marqueeLines } from "@/lib/wall-data";
 import { useEffect, useState } from "react";
 import paperclipImg from "@/assets/paperclip.png";
 import stampImg from "@/assets/stamp.png";
