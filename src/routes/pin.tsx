@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/pin")({
   head: () => ({
@@ -17,23 +17,48 @@ export const Route = createFileRoute("/pin")({
 const noteKinds = ["Confession", "Advice", "Message", "Myth to debunk", "Hope", "One-line truth", "Something else"];
 const prompts: Record<string, string> = {
   Confession: "Something you've never said aloud.",
-  Advice: "One thing you wish someone had told you sooner.",
-  Message: "One thing you wish families understood.",
+  Advice: "What do you wish someone had told you sooner?",
+  Message: "What do you wish they understood?",
   "Myth to debunk": "What do people always get wrong?",
-  Hope: "One hope for the future.",
-  "One-line truth": "A sentence that has been waiting in you.",
+  Hope: "What are you writing toward?",
+  "One-line truth": "Just one true thing.",
   "Something else": "Whatever it is. Leave it here.",
 };
+
+const identityOptions = ["Anonymous", "Initials only", "First name only", "Pseudonym", "Full name", "Private — do not publish"] as const;
+type Identity = typeof identityOptions[number];
+
+const identityHelp: Record<Identity, { placeholder?: string; max?: number; note?: string }> = {
+  "Anonymous": { note: "Your note will appear as 'anon'." },
+  "Initials only": { placeholder: "e.g. R.K.", max: 6 },
+  "First name only": { placeholder: "e.g. Priya" },
+  "Pseudonym": { placeholder: "Any name that feels right" },
+  "Full name": { placeholder: "Your full name" },
+  "Private — do not publish": { note: "This will only be read by our team. It won't appear anywhere publicly." },
+};
+
+const permOptions = ["Website archive", "Instagram", "Quote card", "Internal only"] as const;
 
 function PinPage() {
   const [kind, setKind] = useState("Confession");
   const [text, setText] = useState("");
-  const [identity, setIdentity] = useState("Anonymous");
+  const [identity, setIdentity] = useState<Identity>("Anonymous");
+  const [credit, setCredit] = useState("");
   const [perms, setPerms] = useState<string[]>(["Website archive"]);
   const [agree, setAgree] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
-  const toggle = (v: string) => setPerms(perms.includes(v) ? perms.filter((x) => x !== v) : [...perms, v]);
+  const isPrivate = identity === "Private — do not publish";
+
+  // when private, force only "Internal only"
+  useEffect(() => {
+    if (isPrivate) setPerms(["Internal only"]);
+  }, [isPrivate]);
+
+  const toggle = (v: string) => {
+    if (isPrivate && v !== "Internal only") return;
+    setPerms(perms.includes(v) ? perms.filter((x) => x !== v) : [...perms, v]);
+  };
 
   if (submitted) {
     return (
@@ -51,6 +76,8 @@ function PinPage() {
     );
   }
 
+  const help = identityHelp[identity];
+
   return (
     <SiteShell>
       <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
@@ -60,9 +87,8 @@ function PinPage() {
           <p className="mt-5 text-ink-soft max-w-xl mx-auto">One line. A confession. A hope. A truth you've been carrying around in your pocket.</p>
         </div>
 
-        {/* The note itself */}
         <form onSubmit={(e) => { e.preventDefault(); setSubmitted(true); }}
-          className="note-card tape-strip p-8 md:p-10 bg-[color:color-mix(in_oklab,var(--blush)_18%,var(--card))] space-y-8">
+          className="note-card tape-strip tape-blush p-8 md:p-10 bg-[color:color-mix(in_oklab,var(--blush)_18%,var(--card))] space-y-8">
           <div>
             <span className="hand text-base text-plum">what kind of note is this?</span>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -93,21 +119,46 @@ function PinPage() {
           <div className="grid sm:grid-cols-2 gap-6 pt-2 border-t border-dashed border-ink/15">
             <div>
               <span className="eyebrow block mb-2">Credit as</span>
-              <select value={identity} onChange={(e) => setIdentity(e.target.value)}
+              <select value={identity} onChange={(e) => setIdentity(e.target.value as Identity)}
                 className="w-full bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60">
-                {["Anonymous", "Initials only", "First name only", "Pseudonym", "Private — do not publish"].map((o) => <option key={o}>{o}</option>)}
+                {identityOptions.map((o) => <option key={o}>{o}</option>)}
               </select>
+              {help.placeholder && (
+                <input
+                  type="text"
+                  value={credit}
+                  onChange={(e) => setCredit(e.target.value)}
+                  maxLength={help.max}
+                  placeholder={help.placeholder}
+                  className="mt-2 w-full bg-paper-deep/40 border border-ink/10 rounded-md p-3 text-sm focus:outline-none focus:border-plum/60"
+                />
+              )}
+              {help.note && (
+                <p className="mt-2 text-xs text-ink-soft leading-relaxed italic">{help.note}</p>
+              )}
             </div>
             <div>
               <span className="eyebrow block mb-2">May appear on</span>
               <div className="flex flex-wrap gap-2">
-                {["Website archive", "Instagram", "Quote card", "Internal only"].map((p) => (
-                  <button type="button" key={p} onClick={() => toggle(p)}
-                    className={`px-3 py-1.5 rounded-full text-xs border ${perms.includes(p) ? "bg-plum/10 border-plum text-foreground" : "border-ink/20 text-ink-soft"}`}>
-                    {p}
-                  </button>
-                ))}
+                {permOptions.map((p) => {
+                  const disabled = isPrivate && p !== "Internal only";
+                  const active = perms.includes(p);
+                  return (
+                    <button type="button" key={p} onClick={() => toggle(p)} disabled={disabled}
+                      className={`px-3 py-1.5 rounded-full text-xs border transition ${
+                        disabled ? "border-ink/10 text-ink-soft/40 line-through cursor-not-allowed" :
+                        active ? "bg-plum/10 border-plum text-foreground" : "border-ink/20 text-ink-soft hover:border-foreground/40"
+                      }`}>
+                      {p}
+                    </button>
+                  );
+                })}
               </div>
+              {isPrivate && (
+                <p className="mt-2 text-xs text-ink-soft italic leading-relaxed">
+                  Since you've chosen to keep this private, it won't be shared publicly.
+                </p>
+              )}
             </div>
           </div>
 
