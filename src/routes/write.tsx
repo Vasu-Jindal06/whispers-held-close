@@ -48,13 +48,22 @@ function WritePage() {
   const [submitted, setSubmitted] = useState(false);
   const [cats, setCats] = useState<string[]>([]);
   const [identity, setIdentity] = useState("Anonymous");
+  const [credit, setCredit] = useState("");
   const [perms, setPerms] = useState<string[]>(["Website archive"]);
   const [agree1, setAgree1] = useState(false);
   const [agree2, setAgree2] = useState(false);
   const [agree3, setAgree3] = useState(false);
 
-  const toggle = (arr: string[], v: string, setter: (a: string[]) => void) =>
+  const isPrivate = identity === "Keep private — do not publish";
+
+  useEffect(() => {
+    if (isPrivate) setPerms(["Internal reading only"]);
+  }, [isPrivate]);
+
+  const toggle = (arr: string[], v: string, setter: (a: string[]) => void) => {
+    if (arr === perms && isPrivate && v !== "Internal reading only") return;
     setter(arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
+  };
 
   if (submitted) return <ThankYou kind="letter" />;
 
