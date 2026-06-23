@@ -52,12 +52,14 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
         />
       )}
 
-      <span className="hand text-[0.8rem] text-plum/70 label-press absolute top-2 right-3 select-none">
-        {kindLabel[item.kind] ?? "left here"}
-      </span>
+      {/* Random Junk Journal Overlays */}
+      {isLetter && (
+        <span className="archive-stamp text-[0.6rem] absolute top-3 right-4 rotate-[15deg] border-plum/30 text-plum/60 select-none">
+          Archive
+        </span>
+      )}
 
-
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3 mt-4">
         <span className="hand text-base text-plum">{item.label}</span>
         <span className="eyebrow text-[0.62rem]">{item.kind}</span>
       </div>

@@ -108,16 +108,32 @@ function Hero() {
             or simply read the wall.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <Link to="/write" className="px-6 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition">
+          <div className="mt-10 flex flex-wrap items-center gap-3 relative">
+            {/* Left side stickers */}
+            <div className="absolute -left-12 -top-6 text-plum opacity-60 rotate-[-15deg] pointer-events-none">
+               <span className="text-2xl">❀</span>
+            </div>
+            <img src={flowerImg} alt="" className="absolute -left-20 bottom-0 w-16 opacity-40 mix-blend-multiply rotate-[25deg] pointer-events-none" />
+
+            {/* Links */}
+            <Link to="/write" className="relative px-6 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition z-10">
               Write a Letter
             </Link>
-            <Link to="/pin" className="px-6 py-3.5 rounded-full border border-foreground/30 text-foreground text-sm font-medium hover:bg-foreground/5 transition">
+            <Link to="/pin" className="relative px-6 py-3.5 rounded-full border border-foreground/30 text-foreground text-sm font-medium hover:bg-foreground/5 transition z-10 bg-background/50 backdrop-blur-sm">
               Pin a Note
             </Link>
-            <Link to="/wall" className="px-6 py-3.5 rounded-full text-foreground text-sm font-medium hover:bg-foreground/5 transition">
+            <Link to="/wall" className="relative px-6 py-3.5 rounded-full text-foreground text-sm font-medium hover:bg-foreground/5 transition z-10 bg-background/50 backdrop-blur-sm">
               Read the Wall →
             </Link>
+
+            {/* Right side stickers */}
+            <div className="absolute -right-6 top-1 text-gold opacity-80 rotate-[10deg] pointer-events-none">
+               <span className="text-3xl">✧</span>
+            </div>
+            <img src={stampImg} alt="" className="absolute -right-16 -bottom-8 w-14 opacity-50 mix-blend-multiply rotate-[-20deg] pointer-events-none" />
+            <div className="absolute -right-24 top-2 rotate-[5deg] opacity-70 pointer-events-none">
+               <span className="archive-stamp !text-[0.5rem] !border-plum/40 !text-plum/80">PRIDE 2026</span>
+            </div>
           </div>
           <Link to="/privacy" className="inline-block mt-5 text-sm text-ink-soft hover:text-foreground underline underline-offset-4 decoration-dotted">
             How privacy works →

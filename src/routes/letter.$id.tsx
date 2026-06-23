@@ -73,13 +73,13 @@ function LetterPage() {
       <div className="mx-auto max-w-3xl px-6 pt-12 pb-24">
         <Link to="/wall" className="text-sm text-ink-soft hover:text-foreground">← back to the wall</Link>
 
-        <div className="mt-8 grid grid-cols-3 gap-4 text-xs text-ink-soft">
+        <div className="mt-8 grid grid-cols-3 gap-4 text-xs text-ink-soft bg-paper-deep/50 p-4 rounded-sm border border-dashed border-ink/20">
           <div><span className="eyebrow block mb-1">Category</span>{item.label}</div>
           <div><span className="eyebrow block mb-1">Credited</span>{item.author}</div>
           <div><span className="eyebrow block mb-1">Status</span>shared with permission</div>
         </div>
 
-        <article className="relative mt-8 paper-card paper-grain p-10 md:p-16">
+        <article className="relative mt-8 paper-card paper-grain p-10 md:p-16 ruled-paper torn-bottom shadow-lg">
           <img
             src={paperclipImg}
             alt=""
@@ -93,6 +93,14 @@ function LetterPage() {
             loading="lazy"
             className="pointer-events-none absolute top-6 right-6 w-20 md:w-24 opacity-70 mix-blend-multiply select-none stamp-press"
           />
+          
+          <div className="absolute top-10 right-28 opacity-80 rotate-[12deg] pointer-events-none">
+             <span className="archive-stamp !text-[0.6rem] !border-ink/30 !text-ink/70">ARCHIVED</span>
+          </div>
+
+          <div className="absolute top-4 left-[45%] opacity-90 pointer-events-none">
+             <div className="tape-strip tape-blush"></div>
+          </div>
 
           {item.title && (
             <h1 className="serif text-3xl md:text-5xl text-foreground leading-[1.1] max-w-2xl">

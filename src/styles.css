@@ -1,4 +1,4 @@
-@import "tailwindcss" source(none);
+@import "tailwindcss";
 @source "../src";
 @import "tw-animate-css";
 
@@ -50,17 +50,18 @@
 :root {
   --radius: 0.75rem;
 
-  /* Warm parchment palette */
-  --paper: oklch(0.978 0.012 80);          /* cream/parchment */
-  --paper-deep: oklch(0.955 0.018 75);     /* slightly darker paper */
-  --ink: oklch(0.255 0.035 320);           /* deep plum near-black */
-  --ink-soft: oklch(0.42 0.04 320);        /* softer plum */
-  --blush: oklch(0.86 0.06 25);            /* soft blush */
-  --lavender: oklch(0.82 0.06 300);        /* muted lavender */
-  --teal: oklch(0.72 0.06 200);            /* muted teal */
-  --gold: oklch(0.78 0.10 80);             /* warm gold */
-  --plum: oklch(0.45 0.10 340);            /* deep mauve */
-  --tape: oklch(0.88 0.05 80 / 0.7);       /* translucent tape */
+  /* Warm parchment palette - Junk Journal style */
+  --paper: oklch(0.96 0.015 80);           /* warmer cream/parchment */
+  --paper-deep: oklch(0.93 0.02 75);       /* slightly darker, aged paper */
+  --ink: oklch(0.25 0.02 320);             /* softer ink */
+  --ink-soft: oklch(0.40 0.03 320);        /* faded ink */
+  --blush: oklch(0.84 0.05 25);            /* dusty pink */
+  --lavender: oklch(0.80 0.04 300);        /* muted lavender */
+  --teal: oklch(0.70 0.05 200);            /* muted teal/navy */
+  --gold: oklch(0.75 0.08 80);             /* warm gold/ochre */
+  --plum: oklch(0.42 0.08 340);            /* deep mauve/brown */
+  --olive: oklch(0.78 0.06 110);           /* muted olive green */
+  --tape: oklch(0.90 0.04 80 / 0.6);       /* translucent tape */
 
   --background: var(--paper);
   --foreground: var(--ink);
@@ -113,20 +114,21 @@
 
 @utility paper-card {
   background: var(--card);
-  border: 1px solid color-mix(in oklab, var(--ink) 8%, transparent);
+  border: 1px solid color-mix(in oklab, var(--ink) 4%, transparent);
   border-radius: 4px;
+  /* Softer, deeper shadows for that vintage postal feel */
   box-shadow:
-    0 1px 0 color-mix(in oklab, var(--ink) 4%, transparent),
-    0 12px 24px -16px color-mix(in oklab, var(--ink) 18%, transparent),
-    0 30px 60px -40px color-mix(in oklab, var(--ink) 22%, transparent);
+    0 1px 1px color-mix(in oklab, var(--ink) 3%, transparent),
+    0 16px 32px -12px color-mix(in oklab, var(--ink) 12%, transparent),
+    0 40px 80px -30px color-mix(in oklab, var(--ink) 18%, transparent);
 }
 
 @utility note-card {
   background: var(--card);
   border-radius: 2px;
   box-shadow:
-    0 1px 1px color-mix(in oklab, var(--ink) 6%, transparent),
-    0 8px 18px -12px color-mix(in oklab, var(--ink) 22%, transparent);
+    0 1px 2px color-mix(in oklab, var(--ink) 4%, transparent),
+    0 10px 24px -10px color-mix(in oklab, var(--ink) 15%, transparent);
   position: relative;
 }
 
@@ -141,6 +143,12 @@
     height: 18px;
     background: var(--tape);
     box-shadow: 0 1px 2px color-mix(in oklab, var(--ink) 10%, transparent);
+    backdrop-filter: blur(1px);
+    border-radius: 1px;
+    /* subtle grid texture on tape */
+    background-image: linear-gradient(color-mix(in oklab, var(--ink) 5%, transparent) 1px, transparent 1px),
+                      linear-gradient(90deg, color-mix(in oklab, var(--ink) 5%, transparent) 1px, transparent 1px);
+    background-size: 4px 4px;
   }
 }
 
@@ -264,15 +272,26 @@
   &::before { background: color-mix(in oklab, var(--gold) 60%, transparent); }
 }
 
-/* === Torn bottom edge === */
+/* === Torn top/bottom edge === */
 @utility torn-bottom {
-  -webkit-mask-image: radial-gradient(circle at 6px 100%, transparent 4px, black 5px), linear-gradient(black, black);
-  -webkit-mask-size: 12px 8px, 100% calc(100% - 8px);
+  -webkit-mask-image: radial-gradient(circle at 4px 100%, transparent 3px, black 3.5px), linear-gradient(black, black);
+  -webkit-mask-size: 8px 6px, 100% calc(100% - 6px);
   -webkit-mask-position: bottom left, top left;
   -webkit-mask-repeat: repeat-x, no-repeat;
-          mask-image: radial-gradient(circle at 6px 100%, transparent 4px, black 5px), linear-gradient(black, black);
-          mask-size: 12px 8px, 100% calc(100% - 8px);
+          mask-image: radial-gradient(circle at 4px 100%, transparent 3px, black 3.5px), linear-gradient(black, black);
+          mask-size: 8px 6px, 100% calc(100% - 6px);
   mask-position: bottom left, top left;
+  mask-repeat: repeat-x, no-repeat;
+}
+
+@utility torn-top {
+  -webkit-mask-image: radial-gradient(circle at 4px 0, transparent 3px, black 3.5px), linear-gradient(black, black);
+  -webkit-mask-size: 8px 6px, 100% calc(100% - 6px);
+  -webkit-mask-position: top left, bottom left;
+  -webkit-mask-repeat: repeat-x, no-repeat;
+          mask-image: radial-gradient(circle at 4px 0, transparent 3px, black 3.5px), linear-gradient(black, black);
+          mask-size: 8px 6px, 100% calc(100% - 6px);
+  mask-position: top left, bottom left;
   mask-repeat: repeat-x, no-repeat;
 }
 
@@ -321,5 +340,82 @@
     linear-gradient(to bottom, transparent 0, transparent calc(1.6rem - 1px), color-mix(in oklab, var(--teal) 30%, transparent) calc(1.6rem - 1px), color-mix(in oklab, var(--teal) 30%, transparent) 1.6rem, transparent 1.6rem);
   background-size: 100% 1.6rem;
   background-position: 0 0.8rem;
+}
+
+/* === Junk Journaling Elements === */
+
+/* Vintage Postage Stamp Edge (Perforated) */
+@utility vintage-stamp {
+  position: relative;
+  background-color: var(--card);
+  padding: 8px;
+  box-shadow: 0 2px 5px color-mix(in oklab, var(--ink) 15%, transparent);
+  /* Perforated edge mask */
+  mask-image: radial-gradient(circle at 0 0, transparent 3px, black 3.5px);
+  mask-size: 10px 10px;
+  mask-position: -5px -5px;
+  -webkit-mask-image: radial-gradient(circle at 0 0, transparent 3px, black 3.5px);
+  -webkit-mask-size: 10px 10px;
+  -webkit-mask-position: -5px -5px;
+}
+
+/* Vintage Ticket Stub */
+@utility ticket-stub {
+  position: relative;
+  background-color: var(--card);
+  border: 1px dashed color-mix(in oklab, var(--ink) 20%, transparent);
+  mask-image: radial-gradient(circle at 0 50%, transparent 6px, black 6.5px),
+              radial-gradient(circle at 100% 50%, transparent 6px, black 6.5px);
+  mask-size: 51% 100%;
+  mask-position: left, right;
+  mask-repeat: no-repeat;
+  -webkit-mask-image: radial-gradient(circle at 0 50%, transparent 6px, black 6.5px),
+                      radial-gradient(circle at 100% 50%, transparent 6px, black 6.5px);
+  -webkit-mask-size: 51% 100%;
+  -webkit-mask-position: left, right;
+  -webkit-mask-repeat: no-repeat;
+  box-shadow: 0 2px 4px color-mix(in oklab, var(--ink) 15%, transparent);
+}
+
+/* Archive Stamps (Hand-stamped look) */
+@utility archive-stamp {
+  display: inline-block;
+  padding: 4px 8px;
+  border: 2px solid;
+  border-radius: 4px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  opacity: 0.75;
+  mix-blend-mode: multiply;
+  /* Imperfect stamp texture */
+  -webkit-mask-image: radial-gradient(color-mix(in oklab, black 85%, transparent), black);
+  mask-image: radial-gradient(color-mix(in oklab, black 85%, transparent), black);
+}
+
+/* Wax Seal */
+@utility wax-seal {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #d46a6a, #9c3030);
+  box-shadow:
+    inset 0 0 4px #5e1c1c,
+    0 4px 6px color-mix(in oklab, var(--ink) 20%, transparent),
+    2px 2px 3px color-mix(in oklab, var(--ink) 30%, transparent);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &::after {
+    content: "";
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid color-mix(in oklab, #5e1c1c 50%, transparent);
+    box-shadow: inset 1px 1px 2px #d46a6a;
+  }
 }
 
