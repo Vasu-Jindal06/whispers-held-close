@@ -525,22 +525,50 @@ function FinalCTA() {
       <h2 className="serif text-4xl md:text-5xl text-center text-foreground mb-14">
         How would you like to show up today?
       </h2>
-      <div className="grid md:grid-cols-3 gap-6">
-        {[
-          { to: "/write" as const, title: "Write a Letter", body: "For longer stories, memories, and reflections you want to give shape to.", cta: "Begin a letter" },
-          { to: "/pin" as const, title: "Pin a Note", body: "For confessions, hopes, advice, and short truths. One line is enough.", cta: "Leave a note" },
-          { to: "/wall" as const, title: "Read the Wall", body: "For sitting quietly and reading what others have already left here.", cta: "Open the wall" },
-        ].map((c) => (
-          <Link
-            key={c.to}
-            to={c.to}
-            className="paper-card p-8 group hover:-translate-y-1 transition-transform"
-          >
-            <h3 className="serif text-2xl text-foreground">{c.title}</h3>
-            <p className="mt-3 text-ink-soft leading-relaxed">{c.body}</p>
-            <p className="mt-6 text-sm text-plum group-hover:translate-x-1 transition-transform">{c.cta} →</p>
-          </Link>
-        ))}
+      <div className="grid md:grid-cols-3 gap-8 md:gap-10">
+        {/* Write a Letter - Torn paper + Paperclip */}
+        <Link
+          to="/write"
+          className="relative bg-[#f4f7fa] p-8 pb-10 torn-bottom torn-top ruled-paper shadow-md group hover:-translate-y-1 hover:rotate-[-1deg] transition-transform rotate-[-2deg]"
+        >
+          <img src={paperclipImg} alt="" className="absolute -top-6 left-6 w-8 rotate-[10deg] opacity-90 drop-shadow-sm z-10" />
+          <h3 className="serif text-2xl text-foreground">Write a Letter</h3>
+          <p className="mt-4 text-ink-soft leading-relaxed text-sm">For longer stories, memories, and reflections you want to give shape to.</p>
+          <p className="mt-6 text-sm text-plum group-hover:translate-x-1 transition-transform">Begin a letter →</p>
+        </Link>
+
+        {/* Pin a Note - Yellow Sticky + Red Pin */}
+        <Link
+          to="/pin"
+          className="relative bg-[#fce883] p-8 pb-10 shadow-md group hover:-translate-y-1 hover:rotate-[1deg] transition-transform rotate-[2deg] mt-4 md:mt-0"
+        >
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#d63a3a] shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_2px_4px_4px_rgba(0,0,0,0.2)] z-10">
+            <div className="absolute top-full left-1/2 w-0.5 h-3 bg-black/20 -translate-x-1/2 origin-top rotate-[20deg]" />
+          </div>
+          <h3 className="serif text-2xl text-foreground">Pin a Note</h3>
+          <p className="mt-4 text-ink/80 leading-relaxed text-sm">For confessions, hopes, advice, and short truths. One line is enough.</p>
+          <p className="mt-6 text-sm text-ink group-hover:translate-x-1 transition-transform">Leave a note →</p>
+        </Link>
+
+        {/* Read the Wall - Spiral edge */}
+        <Link
+          to="/wall"
+          className="relative bg-white p-8 pb-10 shadow-sm border border-ink/5 group hover:-translate-y-1 hover:rotate-[1deg] transition-transform rotate-[-1deg] mt-4 md:mt-0"
+        >
+          <div className="absolute top-0 left-0 w-full h-4 flex justify-around px-2 -mt-2">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="w-3 h-3 rounded-full bg-background shadow-[inset_0_1px_2px_rgba(0,0,0,0.2)] border border-ink/5" />
+            ))}
+          </div>
+          <div className="absolute top-0 left-0 w-full h-8 flex justify-around px-2 -mt-2 opacity-50 pointer-events-none">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="w-1.5 h-6 border-l border-r border-t border-[#d4c3b3] rounded-t-full translate-x-[3px] -translate-y-1 skew-x-[15deg]" />
+            ))}
+          </div>
+          <h3 className="serif text-2xl text-foreground mt-4">Read the Wall</h3>
+          <p className="mt-4 text-ink-soft leading-relaxed text-sm">For sitting quietly and reading what others have already left behind.</p>
+          <p className="mt-6 text-sm text-plum group-hover:translate-x-1 transition-transform">Open the wall →</p>
+        </Link>
       </div>
     </section>
   );

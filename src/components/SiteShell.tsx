@@ -110,7 +110,7 @@ function Footer() {
                  <ul className="space-y-3 text-sm mt-2">
                    <li><a href="https://www.instagram.com/enactusvitc/" className="hover:text-foreground text-ink-soft">Instagram</a></li>
                    <li><a href="https://www.linkedin.com/company/enactusvitc/posts/?feedView=all" className="hover:text-foreground text-ink-soft">LinkedIn</a></li>
-                   <li><a href="mailto:lettersleft@enactus.org" className="hover:text-foreground text-ink-soft">Email Us</a></li>
+                   <li><a href="mailto:enactus.vitc@gmail.com" className="hover:text-foreground text-ink-soft">Email Us</a></li>
                  </ul>
                  {/* Thank you circle - moved slightly to not overlap social links */}
                  <div className="absolute top-4 left-44 md:left-56 w-14 h-14 rounded-full border border-dashed border-ink/30 flex items-center justify-center rotate-[20deg] pointer-events-none opacity-80">
@@ -176,7 +176,7 @@ function Footer() {
                 <ul className="space-y-3 text-sm serif tracking-wide">
                   <li><Link to="/privacy" className="hover:text-foreground text-ink-soft block py-1">Privacy & Consent</Link></li>
                   <li><Link to="/about" className="hover:text-foreground text-ink-soft block py-1">About the Campaign</Link></li>
-                  <li><a href="mailto:lettersleft@enactus.org" className="hover:text-foreground text-plum border-b border-plum block py-1 w-fit">Removal requests</a></li>
+                  <li><a href="mailto:enactus.vitc@gmail.com" className="hover:text-foreground text-plum border-b border-plum block py-1 w-fit">Removal requests</a></li>
                 </ul>
              </div>
 
