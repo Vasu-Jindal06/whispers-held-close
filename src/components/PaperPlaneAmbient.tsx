@@ -12,7 +12,7 @@ export function PaperPlaneAmbient() {
   const [trail, setTrail] = useState<Point[]>([]);
   const [planePos, setPlanePos] = useState<Point | null>(null);
   const [pathData, setPathData] = useState("");
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const updatePath = () => {

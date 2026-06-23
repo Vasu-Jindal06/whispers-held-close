@@ -6,6 +6,10 @@ import paperclipImg from "@/assets/paperclip.png";
 import { MarginNote } from "@/components/MarginNote";
 import { PaperPlaneTransition } from "@/components/PaperPlaneTransition";
 import { SubmissionSuccess } from "@/components/SubmissionSuccess";
+import { WallCard } from "@/components/WallCard";
+import type { WallItem } from "@/lib/wall-data";
+import flower2Img from "@/assets/flower2.png";
+import flower3Img from "@/assets/flower3.png";
 
 export const Route = createFileRoute("/write")({
   head: () => ({
@@ -18,6 +22,30 @@ export const Route = createFileRoute("/write")({
   }),
   component: WritePage,
 });
+
+const floatingNotesWrite: WallItem[] = [
+  {
+    id: "fw1",
+    kind: "younger_self",
+    label: "Advice to younger queer people",
+    body: "Be gentle with your timeline.",
+    author: "Riya, 24 · India",
+    tone: "lavender",
+    attach: "pin",
+    rotate: -2
+  },
+  {
+    id: "fw2",
+    kind: "coming_out_story",
+    label: "Coming out story",
+    title: "I told my best friend first. She didn't flinch.",
+    body: "",
+    author: "left anonymously",
+    tone: "teal",
+    attach: "paperclip",
+    rotate: 2
+  }
+];
 
 export const categoryMap: Record<string, string> = {
   "coming_out_story": "Coming out story",
@@ -127,8 +155,20 @@ function WritePage() {
 
   return (
     <SiteShell>
-      <PaperPlaneTransition active={transitioning} onComplete={() => { setTransitioning(false); setSubmitted(true); }} />
-      <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
+      <PaperPlaneTransition active={transitioning} onComplete={() => setSubmitted(true)} />
+      <div className="min-h-screen relative overflow-hidden">
+        
+        {/* Floating Background Decorative Cards (Desktop only) */}
+        <div className="hidden xl:block absolute left-8 top-32 w-[300px] opacity-100 z-0 pointer-events-none group hover:pointer-events-auto">
+          <WallCard item={floatingNotesWrite[0]} dense />
+          <img src={flower2Img} alt="" className="absolute -bottom-10 -right-6 w-32 rotate-[-15deg] opacity-90 mix-blend-multiply pointer-events-none" />
+        </div>
+        <div className="hidden xl:block absolute right-8 top-1/3 w-[300px] opacity-100 z-0 pointer-events-none group hover:pointer-events-auto">
+          <WallCard item={floatingNotesWrite[1]} dense />
+          <img src={flower3Img} alt="" className="absolute -top-12 -left-8 w-28 rotate-[25deg] opacity-90 mix-blend-multiply pointer-events-none" />
+        </div>
+
+        <div className="mx-auto max-w-4xl px-6 py-16 md:py-24 relative z-10">
         <div className="text-center mb-12">
           <p className="hand text-xl text-plum mb-3">write only what feels safe.</p>
           <h1 className="serif text-4xl md:text-6xl text-foreground leading-tight">
@@ -240,6 +280,7 @@ function WritePage() {
             </button>
           </div>
         </form>
+      </div>
       </div>
     </SiteShell>
   );

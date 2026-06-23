@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import ambientAudioSrc from "@/assets/ambient.mp3";
 
 /**
  * Optional ambient companion. Off by default.
- * Plays the /ambient.mp3 file from the public directory.
+ * Plays the ambient.mp3 file.
  */
 export function AmbientAudio() {
   const [on, setOn] = useState(false);
@@ -19,7 +20,7 @@ export function AmbientAudio() {
 
   return (
     <>
-      <audio ref={audioRef} src="/ambient.mp3" loop />
+      <audio ref={audioRef} src={ambientAudioSrc} loop />
       <button
         type="button"
         onClick={() => setOn((v) => !v)}

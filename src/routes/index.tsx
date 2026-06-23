@@ -62,11 +62,10 @@ function HomePage() {
       <TrustBlock />
       <CategoriesBlock />
       <ArchivePreview />
+      <FinalCTA />
       <VoicesBeyond />
-      <NotReadyBlock />
       <WhyBlock />
       <MarginNote icon="stars" className="left-[30%] -mt-10" opacity={40} />
-      <FinalCTA />
     </SiteShell>
   );
 }

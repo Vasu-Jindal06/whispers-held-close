@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
+import paperclipImg from "@/assets/paperclip.png";
+import customImage from "@/assets/image.png";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
@@ -32,7 +34,7 @@ const sections = [
   },
   {
     title: "Nothing is posted without consent",
-    body: "Every submission is reviewed by a small Enactus VIT Chennai team. If you ticked 'internal only,' it stays internal. If you ticked the archive, we may publish it there. If you ticked nothing, we hold it privately as part of the project record only.",
+    body: "Every submission is reviewed by our team. If you ticked 'internal only,' it stays internal. If you ticked the archive, we may publish it there. If you ticked nothing, we hold it privately as part of the project record only.",
   },
   {
     title: "How review works",
@@ -44,7 +46,7 @@ const sections = [
   },
   {
     title: "How removal works",
-    body: "You can ask us to remove your submission at any time, for any reason, no questions asked. Write to lettersleft@enactus.org and reference any detail from your submission (a phrase, an approximate date) so we can find it. We will remove it within 7 days.",
+    body: "You can ask us to remove your submission at any time, for any reason, no questions asked. Write to enactus.vitc@gmail.com and reference any detail from your submission (a phrase, an approximate date) so we can find it. We will remove it within 7 days.",
   },
   {
     title: "What not to submit",
@@ -59,39 +61,57 @@ const sections = [
 function PrivacyPage() {
   return (
     <SiteShell>
-      <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
-        <p className="eyebrow mb-4">The trust page</p>
-        <h1 className="serif text-4xl md:text-6xl text-foreground leading-tight">
-          Privacy, consent, and how we hold what you share.
-        </h1>
-        <p className="mt-6 text-lg text-ink-soft leading-relaxed">
-          A plain-language walkthrough of how this archive works — who reads
-          submissions, what stays private, and how to take something back.
-        </p>
+      <div>
+        {/* Section 1 — Header */}
+        <section className="bg-foreground text-background py-16 md:py-28 px-6">
+          <div className="mx-auto max-w-4xl text-center md:text-left">
+            <h1 className="serif text-4xl md:text-6xl text-background leading-tight">
+              Privacy, consent, and how we hold what you share.
+            </h1>
+            <p className="mt-6 text-lg md:text-xl text-background/80 leading-relaxed font-light max-w-2xl">
+              A plain-language walkthrough — who reads submissions, what stays private, and how to take something back.
+            </p>
+          </div>
+        </section>
 
-        <div className="mt-14 space-y-10">
-          {sections.map((s, i) => (
-            <section key={s.title} className="border-l-2 border-plum/40 pl-6">
-              <p className="hand text-base text-plum">0{i + 1}</p>
-              <h2 className="serif text-2xl md:text-3xl text-foreground mt-1">{s.title}</h2>
-              <p className="mt-3 text-ink leading-relaxed">{s.body}</p>
-            </section>
-          ))}
-        </div>
+        {/* Section 2 — The Ten Points */}
+        <section className="py-16 md:py-24 px-6">
+          <div className="mx-auto max-w-5xl columns-1 md:columns-2 gap-8 space-y-8">
+            {sections.map((s, i) => {
+              // Determine attachment type based on index to mimic alternating rows in masonry
+              const attachmentType = i % 3 === 0 ? "tape" : i % 3 === 1 ? "pin" : "clip";
+              
+              return (
+                <div key={i} className="break-inside-avoid paper-card bg-[#fdfbf7] p-8 shadow-sm relative group hover:-translate-y-1 transition-transform">
+                  
+                  {/* Attachments */}
+                  {attachmentType === "tape" && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-5 tape-strip bg-[#e8cf90] shadow-sm rotate-[-2deg] opacity-80" />
+                  )}
+                  {attachmentType === "pin" && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#d63a3a] shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.3),_2px_4px_4px_rgba(0,0,0,0.2)] z-10">
+                      <div className="absolute top-full left-1/2 w-0.5 h-2.5 bg-black/20 -translate-x-1/2 origin-top rotate-[20deg]" />
+                    </div>
+                  )}
+                  {attachmentType === "clip" && (
+                    <img src={paperclipImg} alt="" className="absolute -top-5 left-8 w-7 rotate-[15deg] opacity-80 drop-shadow-sm z-10" />
+                  )}
 
-        <div className="paper-card p-8 mt-16">
-          <h3 className="serif text-2xl text-foreground">Want something removed?</h3>
-          <p className="mt-2 text-ink-soft">No questions, no friction. Write to us and it's gone within 7 days.</p>
-          <a href="mailto:lettersleft@enactus.org" className="inline-block mt-5 px-5 py-3 rounded-full bg-foreground text-background text-sm">
-            lettersleft@enactus.org
-          </a>
-        </div>
+                  <div className="flex gap-4 items-start">
+                    <span className="hand text-lg text-plum shrink-0 mt-1">
+                      {i < 9 ? `0${i + 1}` : i + 1}
+                    </span>
+                    <div>
+                      <h2 className="serif text-xl text-foreground leading-tight">{s.title}</h2>
+                      <p className="mt-3 text-sm text-ink-soft leading-[1.7]">{s.body}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
-        <div className="mt-12 flex flex-wrap gap-3">
-          <Link to="/write" className="px-5 py-3 rounded-full border border-foreground/30 text-sm">Write a Letter</Link>
-          <Link to="/pin" className="px-5 py-3 rounded-full border border-foreground/30 text-sm">Pin a Note</Link>
-          <Link to="/resources" className="px-5 py-3 rounded-full border border-foreground/30 text-sm">Support & Resources</Link>
-        </div>
       </div>
     </SiteShell>
   );

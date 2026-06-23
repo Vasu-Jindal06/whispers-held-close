@@ -5,6 +5,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { MarginNote } from "@/components/MarginNote";
 import { PaperPlaneTransition } from "@/components/PaperPlaneTransition";
 import { SubmissionSuccess } from "@/components/SubmissionSuccess";
+import { WallCard } from "@/components/WallCard";
+import type { WallItem } from "@/lib/wall-data";
+import flower4Img from "@/assets/flower4.png";
 
 export const Route = createFileRoute("/pin")({
   head: () => ({
@@ -17,6 +20,29 @@ export const Route = createFileRoute("/pin")({
   }),
   component: PinPage,
 });
+
+const floatingNotesPin: WallItem[] = [
+  {
+    id: "fp1",
+    kind: "truth",
+    label: "A truth I've learned",
+    body: "Peace looks different for everyone.",
+    author: "left anonymously",
+    tone: "paper",
+    attach: "tape",
+    rotate: -1
+  },
+  {
+    id: "fp2",
+    kind: "confession",
+    label: "Anonymous confession",
+    body: "Some days I still introduce myself twice.",
+    author: "left anonymously",
+    tone: "blush",
+    attach: "paperclip",
+    rotate: 2
+  }
+];
 
 const pinCategoryMap: Record<string, { label: string; prompt: string }> = {
   "anonymous_confession": { label: "Confession", prompt: "Something you've never said aloud." },
@@ -116,16 +142,27 @@ function PinPage() {
 
   return (
     <SiteShell>
-      <PaperPlaneTransition active={transitioning} onComplete={() => { setTransitioning(false); setSubmitted(true); }} />
-      <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
-        <div className="text-center mb-10">
-          <p className="hand text-xl text-plum mb-2">leave it on the wall.</p>
-          <h1 className="serif text-4xl md:text-6xl text-foreground leading-tight">A short note is enough.</h1>
-          <p className="mt-5 text-ink-soft max-w-xl mx-auto">One line. A confession. A hope. A truth you've been carrying around in your pocket.</p>
+      <PaperPlaneTransition active={transitioning} onComplete={() => setSubmitted(true)} />
+      <div className="min-h-screen relative overflow-hidden">
+        
+        {/* Floating Background Decorative Cards (Desktop only) */}
+        <div className="hidden xl:block absolute left-8 top-32 w-[300px] opacity-100 z-0 pointer-events-none group hover:pointer-events-auto">
+          <WallCard item={floatingNotesPin[0]} dense />
+        </div>
+        <div className="hidden xl:block absolute right-8 top-1/3 w-[300px] opacity-100 z-0 pointer-events-none group hover:pointer-events-auto">
+          <WallCard item={floatingNotesPin[1]} dense />
+          <img src={flower4Img} alt="" className="absolute -bottom-10 -right-6 w-28 rotate-[-5deg] opacity-90 mix-blend-multiply pointer-events-none" />
         </div>
 
-        <form onSubmit={handleSubmit}
-          className="note-card tape-strip tape-blush p-8 md:p-10 bg-[color:color-mix(in_oklab,var(--blush)_18%,var(--card))] space-y-8">
+        <div className="mx-auto max-w-2xl px-6 py-16 md:py-24 relative z-10">
+          <div className="text-center mb-10">
+            <p className="hand text-xl text-plum mb-2">leave it on the wall.</p>
+            <h1 className="serif text-4xl md:text-6xl text-foreground leading-tight">A short note is enough.</h1>
+            <p className="mt-5 text-ink-soft max-w-xl mx-auto">One line. A confession. A hope. A truth you've been carrying around in your pocket.</p>
+          </div>
+
+          <form onSubmit={handleSubmit}
+            className="note-card tape-strip tape-blush p-8 md:p-10 bg-[color:color-mix(in_oklab,var(--blush)_18%,var(--card))] space-y-8">
           <div>
             <span className="hand text-base text-plum">what kind of note is this?</span>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -219,6 +256,7 @@ function PinPage() {
           Have something longer to say?{" "}
           <Link to="/write" className="text-plum underline underline-offset-4">Write a letter instead</Link>
         </p>
+      </div>
       </div>
     </SiteShell>
   );
