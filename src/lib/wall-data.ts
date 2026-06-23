@@ -197,31 +197,31 @@ export const voicesBeyond: VoiceBeyond[] = [
   {
     name: "Sushant Divgikar",
     role: "Performer, singer & queer icon",
-    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    quote: "What people think of me is their problem, not mine.",
     context: "India",
   },
   {
     name: "Laxmi Narayan Tripathi",
     role: "Transgender rights activist",
-    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    quote: "People should be more human-like. They should respect us as humans and consider our rights as transgenders.",
     context: "India",
   },
   {
     name: "Alok Vaid-Menon",
     role: "Writer & performance artist",
-    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    quote: "The majority of people still believe that trans is what we look like, and not who we are.",
     context: "USA / India",
   },
   {
     name: "Vivek Shraya",
     role: "Artist, musician & author",
-    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    quote: "Representation is not enough if it is not accompanied by real change.",
     context: "Canada / India",
   },
   {
     name: "Audre Lorde",
     role: "Poet & civil rights activist",
-    quote: "Placeholder excerpt — to be replaced with a verified, attributed quote before publishing.",
+    quote: "Your silence will not protect you.",
     context: "USA · 1934–1992",
   },
 ];

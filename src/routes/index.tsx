@@ -9,6 +9,8 @@ import flowerImg from "@/assets/flower.png";
 import { supabase } from "@/integrations/supabase/client";
 import { categoryMap } from "./write";
 import type { WallItem } from "@/lib/wall-data";
+import { MarginNote } from "@/components/MarginNote";
+import { PaperPlaneAmbient } from "@/components/PaperPlaneAmbient";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -55,6 +57,7 @@ function HomePage() {
   return (
     <SiteShell>
       <Hero />
+      <MarginNote icon="stars" className="left-[20%] -mt-8" />
       <Marquee />
       <TrustBlock />
       <CategoriesBlock />
@@ -62,6 +65,7 @@ function HomePage() {
       <VoicesBeyond />
       <NotReadyBlock />
       <WhyBlock />
+      <MarginNote icon="stars" className="left-[30%] -mt-10" opacity={40} />
       <FinalCTA />
     </SiteShell>
   );
@@ -94,7 +98,8 @@ function Hero() {
 
   return (
     <section className="relative mx-auto max-w-6xl px-6 pt-16 pb-24 md:pt-24 md:pb-32 overflow-hidden">
-      <div className="grid md:grid-cols-12 gap-10 md:gap-12 items-start">
+      <PaperPlaneAmbient />
+      <div className="grid md:grid-cols-12 gap-10 md:gap-12 items-start relative z-10">
         {/* LEFT — editorial copy */}
         <div className="md:col-span-7">
           <p className="eyebrow mb-6">An Enactus VIT Chennai Pride Archive · 2026</p>
@@ -142,6 +147,7 @@ function Hero() {
 
         {/* RIGHT — tactile archive collage */}
         <div className="md:col-span-5 relative min-h-[520px] md:min-h-[600px]">
+          <MarginNote text="some things are easier to write" rotate={-1.5} icon="arrow" className="-right-16 top-[28%]" />
           {/* back kraft envelope */}
           <div
             className="absolute top-16 right-0 w-[80%] h-52 rounded-sm paper-grain paper-settle"
@@ -249,7 +255,9 @@ function Hero() {
 
 function TrustBlock() {
   return (
-    <section className="bg-paper-deep/50 border-y border-border/60">
+    <section className="bg-paper-deep/50 border-y border-border/60 relative">
+      <MarginNote text="read slowly." rotate={1} className="-left-4 top-10" />
+      <MarginNote text="you're safe here" rotate={-2} className="-right-8 top-16 text-plum" />
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="max-w-2xl">
           <p className="eyebrow mb-4">Before you share</p>
@@ -277,7 +285,8 @@ function TrustBlock() {
 
 function CategoriesBlock() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24">
+    <section className="mx-auto max-w-6xl px-6 py-24 relative">
+      <MarginNote text="or just one line" rotate={1.5} className="-right-6 bottom-16 italic" />
       <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
         <div className="max-w-2xl">
           <p className="eyebrow mb-3">What can you share?</p>
@@ -373,7 +382,10 @@ function ArchivePreview() {
   }, []);
 
   return (
-    <section className="bg-paper-deep/40 border-y border-border/60">
+    <section className="bg-paper-deep/40 border-y border-border/60 relative">
+      <MarginNote text="some took years to write down" rotate={-1} className="-right-12 top-32" />
+      <MarginNote icon="stars" className="-right-8 top-40" />
+      <MarginNote icon="stars" className="-right-16 top-48" />
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="flex items-end justify-between flex-wrap gap-4 mb-12">
           <div>
@@ -420,7 +432,7 @@ function VoicesBeyond() {
           </p>
         </div>
         <p className="hand text-lg text-plum max-w-xs">
-          attributed excerpts only — placeholders here until verified for publication.
+          verified excerpts.
         </p>
       </div>
 
@@ -474,7 +486,10 @@ function NotReadyBlock() {
 
 function WhyBlock() {
   return (
-    <section className="bg-foreground text-background">
+    <section className="bg-foreground text-background relative overflow-hidden">
+      <svg className="absolute -left-10 top-0 h-full w-[200px] text-background opacity-[0.08] pointer-events-none" viewBox="0 0 100 400" preserveAspectRatio="none">
+        <path d="M 0 0 C 100 100, 100 300, 0 400" stroke="currentColor" strokeWidth="2" strokeDasharray="4 8" fill="none" />
+      </svg>
       <div className="mx-auto max-w-5xl px-6 py-24 grid md:grid-cols-5 gap-10">
         <div className="md:col-span-2">
           <p className="eyebrow !text-background/60 mb-3">Why this exists</p>
@@ -504,7 +519,8 @@ function WhyBlock() {
 
 function FinalCTA() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24">
+    <section className="mx-auto max-w-6xl px-6 py-24 relative">
+      <MarginNote text="whenever you're ready." rotate={2} className="-left-16 top-1/3" />
       <p className="eyebrow mb-4 text-center">Three ways to be here</p>
       <h2 className="serif text-4xl md:text-5xl text-center text-foreground mb-14">
         How would you like to show up today?

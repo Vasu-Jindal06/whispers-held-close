@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { useEffect, useState } from "react";
-import paperclipImg from "@/assets/paperclip.png";
 import { supabase } from "@/integrations/supabase/client";
+import paperclipImg from "@/assets/paperclip.png";
+import { MarginNote } from "@/components/MarginNote";
+import { PaperPlaneTransition } from "@/components/PaperPlaneTransition";
+import { SubmissionSuccess } from "@/components/SubmissionSuccess";
 
 export const Route = createFileRoute("/write")({
   head: () => ({
@@ -46,6 +49,7 @@ const permissionMap: Record<string, string> = {
 
 function WritePage() {
   const [submitted, setSubmitted] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const [loading, setLoading] = useState(false);
   
   const [cats, setCats] = useState<string[]>([]);
@@ -104,7 +108,7 @@ function WritePage() {
         status: "pending"
       });
       if (error) throw error;
-      setSubmitted(true);
+      setTransitioning(true);
     } catch (err) {
       console.error(err);
       alert("Something went wrong saving your letter. Please try again.");
@@ -113,10 +117,17 @@ function WritePage() {
     }
   };
 
-  if (submitted) return <ThankYou kind="letter" />;
+  if (submitted) {
+    return (
+      <SiteShell>
+        <SubmissionSuccess onReset={() => { setSubmitted(false); setTitle(""); setBody(""); }} />
+      </SiteShell>
+    );
+  }
 
   return (
     <SiteShell>
+      <PaperPlaneTransition active={transitioning} onComplete={() => { setTransitioning(false); setSubmitted(true); }} />
       <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         <div className="text-center mb-12">
           <p className="hand text-xl text-plum mb-3">write only what feels safe.</p>
@@ -133,6 +144,7 @@ function WritePage() {
           onSubmit={handleSubmit}
           className="paper-card paper-grain p-8 md:p-12 space-y-10 relative"
         >
+          <MarginNote text="write only what feels safe" rotate={-90} className="-left-14 top-1/2 origin-center" />
           <img
             src={paperclipImg}
             alt=""
@@ -182,15 +194,18 @@ function WritePage() {
               placeholder="Optional title — e.g. 'to my mother' or 'the part I never said'"
               className="w-full bg-transparent border-b border-ink/20 focus:border-plum outline-none py-3 serif text-2xl placeholder:text-ink-soft/60"
             />
-            <textarea
-              required
-              value={body}
-              onChange={(e) => setBody(e.target.value)}
-              rows={14}
-              placeholder="Start anywhere. There is no right way to begin."
-              className="mt-6 w-full bg-paper-deep/40 border border-ink/10 rounded-md p-5 text-foreground leading-relaxed focus:outline-none focus:border-plum/60 resize-y"
-              style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem" }}
-            />
+            <div className="relative">
+              <textarea
+                required
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                rows={14}
+                placeholder="Start anywhere. There is no right way to begin."
+                className="mt-6 w-full bg-paper-deep/40 border border-ink/10 rounded-md p-5 text-foreground leading-relaxed focus:outline-none focus:border-plum/60 resize-y"
+                style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem" }}
+              />
+              <MarginNote text="you can be unfinished." rotate={-1} className="right-2 -bottom-8" />
+            </div>
           </Section>
 
           <Section number="05" title="Optional context" hint="Everything here is optional. Skip whatever you'd rather not say.">
@@ -320,26 +335,3 @@ function Consent({ checked, onChange, label }: { checked: boolean; onChange: (b:
   );
 }
 
-function ThankYou({ kind }: { kind: "letter" | "note" }) {
-  return (
-    <SiteShell>
-      <div className="mx-auto max-w-2xl px-6 py-32 text-center">
-        <p className="hand text-2xl text-plum">received, gently.</p>
-        <h1 className="serif text-4xl md:text-6xl text-foreground mt-4 leading-tight">
-          Thank you for leaving this here.
-        </h1>
-        <p className="mt-6 text-ink-soft leading-relaxed">
-          Your {kind} is with us. A small team will read it with care. If you
-          asked to be contacted before publishing, we'll write to you first. If
-          you ever change your mind, write to{" "}
-          <a href="mailto:lettersleft@enactus.org" className="text-plum underline underline-offset-4">lettersleft@enactus.org</a>{" "}
-          and we'll take it down.
-        </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-3">
-          <Link to="/wall" className="px-6 py-3 rounded-full bg-foreground text-background text-sm">Read the Wall</Link>
-          <Link to="/" className="px-6 py-3 rounded-full border border-foreground/30 text-foreground text-sm">Back home</Link>
-        </div>
-      </div>
-    </SiteShell>
-  );
-}

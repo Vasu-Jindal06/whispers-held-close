@@ -2,6 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell } from "@/components/SiteShell";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { MarginNote } from "@/components/MarginNote";
+import { PaperPlaneTransition } from "@/components/PaperPlaneTransition";
+import { SubmissionSuccess } from "@/components/SubmissionSuccess";
 
 export const Route = createFileRoute("/pin")({
   head: () => ({
@@ -53,6 +56,7 @@ function PinPage() {
   const [perms, setPerms] = useState<string[]>(["consent_website"]);
   const [agree, setAgree] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const isPrivate = identity === "Private — do not publish";
@@ -90,7 +94,7 @@ function PinPage() {
         status: "pending"
       });
       if (error) throw error;
-      setSubmitted(true);
+      setTransitioning(true);
     } catch (err) {
       console.error(err);
       alert("Something went wrong saving your note. Please try again.");
@@ -102,15 +106,7 @@ function PinPage() {
   if (submitted) {
     return (
       <SiteShell>
-        <div className="mx-auto max-w-2xl px-6 py-32 text-center">
-          <p className="hand text-2xl text-plum">pinned, with care.</p>
-          <h1 className="serif text-4xl md:text-6xl mt-4 text-foreground">Your note is on the wall.</h1>
-          <p className="mt-6 text-ink-soft">It will be read by a small team and added to the archive only with the permissions you set.</p>
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
-            <Link to="/wall" className="px-6 py-3 rounded-full bg-foreground text-background text-sm">See the wall</Link>
-            <button onClick={() => { setSubmitted(false); setText(""); setAgree(false); }} className="px-6 py-3 rounded-full border border-foreground/30 text-sm">Pin another</button>
-          </div>
-        </div>
+        <SubmissionSuccess onReset={() => { setSubmitted(false); setText(""); setAgree(false); }} isPin />
       </SiteShell>
     );
   }
@@ -120,6 +116,7 @@ function PinPage() {
 
   return (
     <SiteShell>
+      <PaperPlaneTransition active={transitioning} onComplete={() => { setTransitioning(false); setSubmitted(true); }} />
       <div className="mx-auto max-w-3xl px-6 py-16 md:py-24">
         <div className="text-center mb-10">
           <p className="hand text-xl text-plum mb-2">leave it on the wall.</p>
@@ -207,14 +204,16 @@ function PinPage() {
             <span className="text-sm text-foreground">This is mine to share, and I'm okay with the permissions above. I can request removal anytime.</span>
           </label>
 
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <Link to="/privacy" className="text-sm text-plum underline underline-offset-4">How privacy works →</Link>
-            <button type="submit" disabled={!agree || !text || loading}
-              className="px-7 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition disabled:opacity-40 disabled:cursor-not-allowed">
-              {loading ? "Sending..." : "Pin this Note"}
+          <div className="pt-6 border-t border-dashed border-ink/15 text-center">
+            <button type="submit" disabled={loading || !agree}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed">
+              {loading ? "Pinning..." : "Pin Note"}
             </button>
           </div>
         </form>
+        <div className="relative flex justify-center mt-8">
+           <MarginNote text="one line is enough." rotate={1} className="" />
+        </div>
 
         <p className="text-center mt-10 text-sm text-ink-soft">
           Have something longer to say?{" "}

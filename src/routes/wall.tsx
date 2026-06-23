@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { categoryMap } from "./write";
 import { WallItem } from "@/lib/wall-data";
+import { MarginNote } from "@/components/MarginNote";
 
 export const Route = createFileRoute("/wall")({
   head: () => ({
@@ -145,7 +146,8 @@ function WallPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-6 pt-6 pb-4">
+      <section className="mx-auto max-w-6xl px-6 pt-6 pb-4 relative">
+        <MarginNote text="read slowly." rotate={-1} className="-top-2 right-6" />
         <div className="flex flex-wrap items-center gap-2">
           {filterCategories.map((c) => (
             <button
@@ -166,7 +168,9 @@ function WallPage() {
              <p className="text-ink-soft animate-pulse">Loading approved entries...</p>
           </div>
         ) : (
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-7 [column-fill:_balance] grid-fade-in">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-7 [column-fill:_balance] grid-fade-in relative">
+            <MarginNote text="left here anonymously" rotate={1.5} className="-left-10 top-1/3" />
+            <MarginNote icon="heart" className="left-1/2 top-[45%]" />
             {filteredItems.map((item) => (
               <div key={item.id} className="break-inside-avoid mb-7">
                 <WallCard item={item} />

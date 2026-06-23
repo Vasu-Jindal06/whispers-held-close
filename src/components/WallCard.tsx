@@ -1,7 +1,6 @@
 import type { WallItem } from "@/lib/wall-data";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
-import paperclipImg from "@/assets/paperclip.png";
 
 const toneBg: Record<NonNullable<WallItem["tone"]>, string> = {
   blush: "bg-[color:color-mix(in_oklab,var(--blush)_30%,var(--card))]",
@@ -14,43 +13,55 @@ const toneBg: Record<NonNullable<WallItem["tone"]>, string> = {
 export function WallCard({ item, dense = false }: { item: WallItem; dense?: boolean }) {
   const tone = item.tone ?? "paper";
   const isLetter = item.kind === "letter";
-  const attach = item.attach ?? (isLetter ? "paperclip" : "tape");
+  let attach = "none";
+  if (item.kind === "letter" || item.kind === "family" || item.kind === "message_to_family") attach = "paperclip";
+  if (item.kind === "confession" || item.kind === "anonymous_confession" || item.kind === "advice" || item.kind === "younger_self") attach = "tape";
+  if (item.kind === "hope" || item.kind === "hope_for_future") attach = "pin";
 
-  const attachClass =
-    attach === "tape" ? "tape-strip" :
-    attach === "tape-corner" ? "tape-corner" :
-    attach === "pin" ? "pin-top" :
-    "";
-
-  const kindLabel: Record<string, string> = {
-    letter: "archive entry",
-    confession: "left here anonymously",
+  const kindLabelMap: Record<string, string> = {
+    letter: `archive entry · ${(item.id || "000").slice(0, 3)}`,
+    confession: item.author === "Anonymous" ? "left here anonymously" : item.author,
+    anonymous_confession: item.author === "Anonymous" ? "left here anonymously" : item.author,
     advice: "to my younger self",
+    younger_self: "to my younger self",
     truth: "myth to debunk",
+    myth_to_debunk: "myth to debunk",
     hope: "a hope",
+    hope_for_future: "a hope",
     family: "to my family",
+    message_to_family: "to my family",
   };
+  const bottomLabel = kindLabelMap[item.kind] || item.kind;
 
   return (
     <article
       className={cn(
-        "note-card relative p-6 md:p-7 stack-lift paper-grain paper-settle",
+        "note-card relative p-6 md:p-7 paper-grain paper-settle group",
         toneBg[tone],
-        attachClass,
         isLetter ? "md:p-9 pt-9 md:pt-12 ruled-paper" : "",
-        item.kind === "confession" ? "torn-bottom pb-9" : "",
+        item.kind === "confession" || item.kind === "anonymous_confession" ? "torn-bottom pb-9" : "",
+        "transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_12px_28px_rgba(60,40,20,0.13)] transform"
       )}
-      style={{ transform: `rotate(${item.rotate ?? 0}deg)`, ['--rot' as never]: `${item.rotate ?? 0}deg` }}
+      style={{
+        "--tw-rotate": `${item.rotate ?? 0}deg`,
+        transform: `translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate))`,
+        ['--rot' as never]: `${item.rotate ?? 0}deg`
+      } as React.CSSProperties}
     >
       {attach === "paperclip" && (
-        <img
-          src={paperclipImg}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          className="pointer-events-none absolute -top-5 left-6 w-7 md:w-9 rotate-[18deg] drop-shadow-[0_3px_4px_rgba(0,0,0,0.18)] select-none"
-        />
+        <div className="pointer-events-none absolute -top-2 left-[14px] rotate-[15deg] z-10">
+          <svg width="14" height="28" viewBox="0 0 14 28" fill="none" className="drop-shadow-sm">
+            <path d="M7 26C3.68629 26 1 23.3137 1 20V8C1 4.68629 3.68629 2 7 2C10.3137 2 13 4.68629 13 8V22C13 24.2091 11.2091 26 9 26C6.79086 26 5 24.2091 5 22V8" stroke="#999" strokeWidth="1.2" strokeLinecap="round"/>
+          </svg>
+        </div>
       )}
+      {attach === "tape" && (
+        <div className="pointer-events-none absolute -top-[6px] left-1/2 -translate-x-1/2 rotate-[1.5deg] w-[60px] h-[14px] rounded-[2px] z-10" style={{ background: "rgba(210, 185, 140, 0.55)" }} />
+      )}
+      {attach === "pin" && (
+        <div className="pointer-events-none absolute -top-[7px] left-1/2 -translate-x-1/2 w-[12px] h-[12px] rounded-full bg-[#C17B7B] shadow-[0_2px_4px_rgba(0,0,0,0.2)] z-10" />
+      )}
+
 
       {/* Random Junk Journal Overlays */}
       {isLetter && (
@@ -78,12 +89,12 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
       </p>
 
       <div className="mt-5 pt-4 border-t border-dashed border-ink/15 flex items-center justify-between">
-        <span className="text-xs text-ink-soft">{item.author}</span>
+        <span className="hand text-[10px] opacity-55 text-ink-soft">{bottomLabel}</span>
         {isLetter && item.fullLetter && (
           <Link
             to="/letter/$id"
             params={{ id: item.id }}
-            className="text-xs text-plum hover:text-foreground underline underline-offset-4 decoration-dotted"
+            className="text-xs text-plum hover:text-foreground underline underline-offset-4 decoration-dotted relative z-10"
           >
             Read full letter →
           </Link>
