@@ -148,7 +148,7 @@ function WritePage() {
   if (submitted) {
     return (
       <SiteShell>
-        <SubmissionSuccess onReset={() => { setSubmitted(false); setTitle(""); setBody(""); }} />
+        <SubmissionSuccess onReset={() => { setSubmitted(false); setTransitioning(false); setTitle(""); setBody(""); setAgree1(false); setAgree2(false); setAgree3(false); }} />
       </SiteShell>
     );
   }

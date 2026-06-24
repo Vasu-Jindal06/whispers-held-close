@@ -132,7 +132,7 @@ function PinPage() {
   if (submitted) {
     return (
       <SiteShell>
-        <SubmissionSuccess onReset={() => { setSubmitted(false); setText(""); setAgree(false); }} isPin />
+        <SubmissionSuccess onReset={() => { setSubmitted(false); setTransitioning(false); setText(""); setAgree(false); }} isPin />
       </SiteShell>
     );
   }

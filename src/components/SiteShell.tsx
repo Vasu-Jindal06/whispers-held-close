@@ -103,7 +103,7 @@ function Footer() {
               <ul className="space-y-2 text-sm">
                 <li><a href="https://www.instagram.com/enactusvitc/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground text-ink-soft transition-colors">Instagram</a></li>
                 <li><a href="https://www.linkedin.com/company/enactusvitc/posts/?feedView=all" target="_blank" rel="noopener noreferrer" className="hover:text-foreground text-ink-soft transition-colors">LinkedIn</a></li>
-                <li><a href="mailto:enactus.vitc@gmail.com" className="hover:text-foreground text-ink-soft transition-colors">Email Us</a></li>
+                <li><a href="mailto:enactusvitc5@gmail.com" className="hover:text-foreground text-ink-soft transition-colors">Email Us</a></li>
               </ul>
             </div>
           </div>
@@ -127,7 +127,7 @@ function Footer() {
             <ul className="space-y-3 text-sm serif tracking-wide">
               <li><Link to="/privacy" className="hover:text-foreground text-ink-soft transition-colors block py-1">Privacy & Consent</Link></li>
               <li><Link to="/about" className="hover:text-foreground text-ink-soft transition-colors block py-1">About the Campaign</Link></li>
-              <li><a href="mailto:enactus.vitc@gmail.com" className="hover:text-foreground text-plum border-b border-plum transition-colors block py-1 w-fit">Removal requests</a></li>
+              <li><a href="mailto:enactusvitc5@gmail.com" className="hover:text-foreground text-plum border-b border-plum transition-colors block py-1 w-fit">Removal requests</a></li>
             </ul>
             
             {/* Circular Stamp */}
@@ -165,9 +165,9 @@ function Footer() {
           <div className="flex gap-4">
             <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
             <span>·</span>
-            <a href="mailto:enactus.vitc@gmail.com" className="hover:text-foreground transition-colors">Contact</a>
+            <a href="mailto:enactusvitc5@gmail.com" className="hover:text-foreground transition-colors">Contact</a>
             <span>·</span>
-            <a href="mailto:enactus.vitc@gmail.com" className="hover:text-foreground transition-colors">Removal request</a>
+            <a href="mailto:enactusvitc5@gmail.com" className="hover:text-foreground transition-colors">Removal request</a>
           </div>
         </div>
 
