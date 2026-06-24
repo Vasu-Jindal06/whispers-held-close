@@ -41,6 +41,8 @@
   --color-gold: var(--gold);
   --color-plum: var(--plum);
   --color-tape: var(--tape);
+  --color-lilac: var(--lilac);
+  --color-rose: var(--rose);
 
   --font-serif: "Instrument Serif", "Cormorant Garamond", Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -62,6 +64,8 @@
   --plum: oklch(0.42 0.08 340);            /* deep mauve/brown */
   --olive: oklch(0.78 0.06 110);           /* muted olive green */
   --tape: oklch(0.90 0.04 80 / 0.6);       /* translucent tape */
+  --lilac: #CBC3E3;                        /* light purple */
+  --rose: #FAD2DD;                         /* pink shade */
 
   --background: var(--paper);
   --foreground: var(--ink);

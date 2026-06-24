@@ -5,7 +5,7 @@ export type WallItem = {
   title?: string;
   body: string;
   author: string;
-  tone?: "blush" | "lavender" | "teal" | "gold" | "paper";
+  tone?: "blush" | "lavender" | "teal" | "gold" | "paper" | "lilac" | "rose";
   rotate?: number;
   attach?: "paperclip" | "tape" | "tape-corner" | "pin";
   fullLetter?: string | boolean;
@@ -19,7 +19,7 @@ export type Collection = {
   key: string;
   title: string;
   description: string;
-  tone: "blush" | "lavender" | "teal" | "gold" | "paper";
+  tone: "blush" | "lavender" | "teal" | "gold" | "paper" | "lilac" | "rose";
 };
 
 export const collections: Collection[] = [

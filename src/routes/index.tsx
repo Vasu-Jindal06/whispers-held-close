@@ -319,14 +319,14 @@ function ArchivePreview() {
       setLoading(true);
       try {
         const [lettersRes, notesRes] = await Promise.all([
-          supabase.from('letters').select('*').eq('status', 'approved').eq('allow_public_display', true).limit(4),
-          supabase.from('notes').select('*').eq('status', 'approved').eq('allow_public_display', true).limit(4)
+          supabase.from('letters').select('*').eq('status', 'approved').eq('allow_public_display', true).order('created_at', { ascending: false }).limit(10),
+          supabase.from('notes').select('*').eq('status', 'approved').eq('allow_public_display', true).order('created_at', { ascending: false }).limit(10)
         ]);
 
         const lettersData = lettersRes.data || [];
         const notesData = notesRes.data || [];
 
-        const tones = ["blush", "lavender", "teal", "gold", "paper"];
+        const tones = ["blush", "lavender", "teal", "gold", "paper", "lilac", "rose"];
         const attaches = ["paperclip", "tape", "tape-corner", "pin"];
 
         const mappedLetters: WallItem[] = lettersData.map(l => {
@@ -370,7 +370,22 @@ function ArchivePreview() {
         // prioritize featured
         combined = combined.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
         
-        setPreview(combined.slice(0, 6));
+        // prioritize diversity
+        const diverseItems: WallItem[] = [];
+        const seenKinds = new Set<string>();
+        const remaining: WallItem[] = [];
+
+        for (const item of combined) {
+          if (!seenKinds.has(item.kind)) {
+            diverseItems.push(item);
+            seenKinds.add(item.kind);
+          } else {
+            remaining.push(item);
+          }
+        }
+
+        const finalPreview = [...diverseItems, ...remaining].slice(0, 6);
+        setPreview(finalPreview);
       } catch (e) {
         console.error("Error fetching preview:", e);
       } finally {
@@ -402,12 +417,14 @@ function ArchivePreview() {
              <p className="text-ink-soft animate-pulse">Loading preview...</p>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-7 [column-fill:_balance]">
             {preview.map((item) => (
-              <WallCard key={item.id} item={item} dense />
+              <div key={item.id} className="break-inside-avoid mb-7">
+                <WallCard item={item} dense />
+              </div>
             ))}
             {preview.length === 0 && (
-              <p className="text-ink-soft col-span-full">No public entries yet.</p>
+              <p className="text-ink-soft text-center break-inside-avoid">No public entries yet.</p>
             )}
           </div>
         )}

@@ -8,6 +8,18 @@ const toneBg: Record<NonNullable<WallItem["tone"]>, string> = {
   teal: "bg-[color:color-mix(in_oklab,var(--teal)_22%,var(--card))]",
   gold: "bg-[color:color-mix(in_oklab,var(--gold)_28%,var(--card))]",
   paper: "bg-card",
+  lilac: "bg-[color:color-mix(in_oklab,var(--lilac)_30%,var(--card))]",
+  rose: "bg-[color:color-mix(in_oklab,var(--rose)_30%,var(--card))]",
+};
+
+const toneColor: Record<NonNullable<WallItem["tone"]>, string> = {
+  blush: "color-mix(in oklab, var(--blush) 30%, var(--card))",
+  lavender: "color-mix(in oklab, var(--lavender) 28%, var(--card))",
+  teal: "color-mix(in oklab, var(--teal) 22%, var(--card))",
+  gold: "color-mix(in oklab, var(--gold) 28%, var(--card))",
+  paper: "var(--card)",
+  lilac: "color-mix(in oklab, var(--lilac) 30%, var(--card))",
+  rose: "color-mix(in oklab, var(--rose) 30%, var(--card))",
 };
 
 export function WallCard({ item, dense = false }: { item: WallItem; dense?: boolean }) {
@@ -32,6 +44,9 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
     message_to_family: "to my family",
   };
   const bottomLabel = kindLabelMap[item.kind] || item.kind;
+
+  const isLong = item.body && (item.body.length > 320 || item.body.split('\n').length > 7);
+  const shouldTruncate = isLetter && isLong;
 
   return (
     <article
@@ -81,12 +96,22 @@ export function WallCard({ item, dense = false }: { item: WallItem; dense?: bool
         </h3>
       )}
 
-      <p className={cn(
-        "text-ink leading-relaxed",
-        isLetter ? "text-[0.98rem]" : "text-[1.02rem]",
-      )}>
-        {item.body}
-      </p>
+      <div className={cn("relative", shouldTruncate ? "max-h-[14rem] overflow-hidden" : "")}>
+        <p className={cn(
+          "text-ink leading-relaxed whitespace-pre-wrap",
+          isLetter ? "text-[0.98rem]" : "text-[1.02rem]",
+        )}>
+          {item.body}
+        </p>
+        {shouldTruncate && (
+          <div 
+            className="absolute bottom-0 left-0 right-0 h-24 pointer-events-none"
+            style={{
+              background: `linear-gradient(to bottom, transparent, ${toneColor[tone]})`
+            }}
+          />
+        )}
+      </div>
 
       <div className="mt-5 pt-4 border-t border-dashed border-ink/15 flex items-center justify-between">
         <span className="hand text-[10px] opacity-55 text-ink-soft">{bottomLabel}</span>

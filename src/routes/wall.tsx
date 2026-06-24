@@ -55,7 +55,7 @@ function WallPage() {
         const lettersData = lettersRes.data || [];
         const notesData = notesRes.data || [];
 
-        const tones = ["blush", "lavender", "teal", "gold", "paper"];
+        const tones = ["blush", "lavender", "teal", "gold", "paper", "lilac", "rose"];
         const attaches = ["paperclip", "tape", "tape-corner", "pin"];
 
         const mappedLetters: WallItem[] = lettersData.map(l => {
