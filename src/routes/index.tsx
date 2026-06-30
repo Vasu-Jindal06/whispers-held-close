@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import paperclipImg from "@/assets/paperclip.png";
 import stampImg from "@/assets/stamp.png";
 import flowerImg from "@/assets/flower.png";
+import qConnectImg from "@/assets/qconnect-logo.png";
 import { supabase } from "@/integrations/supabase/client";
 import { categoryMap } from "./write";
 import type { WallItem } from "@/lib/wall-data";
@@ -65,6 +66,7 @@ function HomePage() {
       <FinalCTA />
       <VoicesBeyond />
       <WhyBlock />
+      <CollaboratorsBlock />
       <MarginNote icon="stars" className="left-[30%] -mt-10" opacity={40} />
     </SiteShell>
   );
@@ -585,6 +587,46 @@ function FinalCTA() {
           <p className="mt-4 text-ink-soft leading-relaxed text-sm">For sitting quietly and reading what others have already left behind.</p>
           <p className="mt-6 text-sm text-plum group-hover:translate-x-1 transition-transform">Open the wall →</p>
         </Link>
+      </div>
+    </section>
+  );
+}
+
+function CollaboratorsBlock() {
+  return (
+    <section className="bg-paper-deep/30 border-y border-border/50 relative overflow-hidden">
+      <div className="mx-auto max-w-6xl px-6 py-24">
+        <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-center justify-between">
+          <div className="max-w-xl text-center md:text-left">
+            <p className="eyebrow mb-3">Together, We Hold Space</p>
+            <h2 className="serif text-3xl md:text-4xl text-foreground mb-4 leading-tight">
+              Every safe space is built by people who choose compassion over silence.
+            </h2>
+            <p className="text-ink-soft leading-relaxed">
+              Letters Left Here is brought to life through collaborations with organizations that believe every story deserves to be heard with dignity, empathy, and care.
+            </p>
+          </div>
+          
+          <div className="w-full md:w-[450px] flex-shrink-0 relative">
+             <article className="note-card paper-grain p-8 md:p-10 bg-[#fcf9f5] shadow-md group hover:-translate-y-1 hover:rotate-[0deg] transition-transform rotate-[1.5deg] paper-settle stack-lift relative border border-black/5">
+               <img 
+                 src={paperclipImg} 
+                 alt="" 
+                 aria-hidden 
+                 className="absolute -top-5 left-10 w-9 rotate-[15deg] opacity-90 drop-shadow-sm z-10 select-none pointer-events-none" 
+               />
+               <div className="flex flex-col items-center text-center mt-2">
+                 <div className="w-28 h-28 flex items-center justify-center mb-5">
+                   <img src={qConnectImg} alt="QConnect Logo" className="w-full h-full object-contain" />
+                 </div>
+                 <h3 className="serif text-2xl text-foreground mb-3">QConnect</h3>
+                 <p className="text-[0.9rem] text-ink-soft leading-relaxed">
+                   QConnect is a youth-led initiative dedicated to building safer, more inclusive spaces for LGBTQIA+ individuals through community, conversations, education, and support. Their commitment to creating environments where every identity is respected aligns deeply with the spirit of Letters Left Here.
+                 </p>
+               </div>
+             </article>
+          </div>
+        </div>
       </div>
     </section>
   );
