@@ -621,7 +621,7 @@ function CollaboratorsBlock() {
                  </div>
                  <h3 className="serif text-2xl text-foreground mb-3">QConnect</h3>
                  <p className="text-[0.9rem] text-ink-soft leading-relaxed">
-                   QConnect is a youth-led initiative dedicated to building safer, more inclusive spaces for LGBTQIA+ individuals through community, conversations, education, and support. Their commitment to creating environments where every identity is respected aligns deeply with the spirit of Letters Left Here.
+                  QConnect is a Delhi-based, youth-led initiative that fosters safe and inclusive spaces for LGBTQIA+ individuals through community events, mentorship, networking, and meaningful conversations. By creating opportunities for connection, support, and belonging, they empower individuals to thrive in both their personal and professional journeys.
                  </p>
                </div>
              </article>
